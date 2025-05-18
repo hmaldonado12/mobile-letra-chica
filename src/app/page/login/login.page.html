@@ -1,7 +1,7 @@
 <ion-content class="login-page">
   <div class="center-content">
     <h1>Login</h1>
-    <form>
+    <form (ngSubmit)="onLogin()">
       <ion-item>
         <ion-label position="floating">Email</ion-label>
         <ion-input type="email"></ion-input>
