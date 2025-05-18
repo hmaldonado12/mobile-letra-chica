@@ -1,0 +1,7 @@
+{
+  "name": "letra chica",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
