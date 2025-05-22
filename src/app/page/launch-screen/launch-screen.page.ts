@@ -7,7 +7,12 @@ import { Router } from '@angular/router';
   styleUrls: ['./launch-screen.page.scss'],
   standalone: false,
 })
-
 export class LaunchScreenPage {
-  
+  constructor(private router: Router) {}
+
+  ngOnInit() {
+    setTimeout(() => {
+      this.router.navigate(['/login']);
+    }, 4000);
+  }
 }
