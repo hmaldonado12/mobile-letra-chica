@@ -5,6 +5,7 @@ import { AlertController, IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {LogoComponent} from "../../../components/logo/logo.component";
+import {SignInGoogleRepositoryService} from "../../infra/rest/sign-in-google-repository.service";
 
 @Component({
   selector: 'app-login',
@@ -17,9 +18,16 @@ export class LoginPage implements OnInit {
   username: string = '';
   password: string = '';
 
-  constructor(private router: Router, private alertController: AlertController) {}
+  constructor(
+    private router: Router,
+    private alertController: AlertController,
+    private signInGoogleRepositoryService: SignInGoogleRepositoryService,
+  ) {}
 
-  ngOnInit() {}
+  ngOnInit(): void {
+        console.log('LoginPage');
+    }
+
 
   async login() {
 
@@ -32,6 +40,18 @@ export class LoginPage implements OnInit {
         buttons: ['OK'],
       });
       await alert.present();
+    }
+  }
+  async loginWithGoogle() {
+    try {
+      const user = await this.signInGoogleRepositoryService.signInWithGoogle();
+      console.log('Usuario autenticado:', user.email);
+    } catch (error: any) {
+      if (error.error === 'popup_closed_by_user') {
+        console.warn('El usuario cerró la ventana emergente antes de completar el login.');
+      } else {
+        console.error('Error al iniciar sesión:', error.message || error);
+      }
     }
   }
 }
