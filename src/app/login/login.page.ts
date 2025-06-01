@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-
+import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
 import { AlertController, IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import {LogoComponent} from "../../components/logo/logo.component";
+import { LogoComponent } from '../../components/logo/logo.component';
+
 
 @Component({
   selector: 'app-login',
@@ -22,13 +23,27 @@ export class LoginPage implements OnInit {
   ngOnInit() {}
 
   async login() {
-
     if (this.username && this.password) {
       this.router.navigateByUrl('/home');
     } else {
       const alert = await this.alertController.create({
         header: 'Error de Login',
         message: 'Por favor, ingresa un usuario y contraseña.',
+        buttons: ['OK'],
+      });
+      await alert.present();
+    }
+  }
+
+  async loginWithGoogle() {
+    try {
+      const result = await GoogleAuth.signIn();
+      // Handle result (user info, token, etc.)
+      this.router.navigateByUrl('/home');
+    } catch (error) {
+      const alert = await this.alertController.create({
+        header: 'Error de Google Login',
+        message: 'No se pudo iniciar sesión con Google.',
         buttons: ['OK'],
       });
       await alert.present();

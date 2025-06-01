@@ -1,21 +1,50 @@
 <ion-header>
   <app-logo></app-logo>
-  <ion-toolbar>
-    <ion-title>Iniciar Sesión</ion-title> </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-  <form (ngSubmit)="login()">
-    <ion-item>
-      <ion-label position="floating">Usuario</ion-label>
-      <ion-input type="text" [(ngModel)]="username" name="username" required></ion-input>
-    </ion-item>
+  <div class="rounded-login-form material-style">
+    <form (ngSubmit)="login()">
+      <ion-item class="rounded-item">
+        <ion-label position="floating">Usuario</ion-label>
+        <ion-input
+          type="text"
+          [(ngModel)]="username"
+          name="username"
+          required
+          class="rounded-input"
+        ></ion-input>
+      </ion-item>
 
-    <ion-item>
-      <ion-label position="floating">Contraseña</ion-label>
-      <ion-input type="password" [(ngModel)]="password" name="password" required></ion-input>
-    </ion-item>
+      <ion-item class="rounded-item">
+        <ion-label position="floating">Contraseña</ion-label>
+        <ion-input
+          type="password"
+          [(ngModel)]="password"
+          name="password"
+          required
+          class="rounded-input"
+        ></ion-input>
+      </ion-item>
 
-    <ion-button expand="block" type="submit" class="ion-margin-top">Iniciar Sesión</ion-button>
-  </form>
+
+      <ion-button
+        expand="block"
+        type="submit"
+        class="ion-margin-top rounded-button"
+      >
+        Iniciar Sesión
+      </ion-button>
+
+      <ion-button
+        expand="block"
+        color="danger"
+        (click)="loginWithGoogle()"
+        class="ion-margin-top rounded-button"
+      >
+        <ion-icon name="logo-google" slot="start"></ion-icon>
+        Iniciar con Google
+      </ion-button>
+    </form>
+  </div>
 </ion-content>
