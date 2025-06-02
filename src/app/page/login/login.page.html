@@ -17,10 +17,14 @@
     </ion-item>
     <ion-button expand="block" type="submit" class="ion-margin-top">Iniciar Sesión</ion-button>
   </form>
-  <ion-item>
+  <ion-item *ngIf="!isWeb">
     <ion-button expand="block" color="primary" (click)="loginWithGoogle()">
       <ion-icon name="logo-google" slot="start"></ion-icon>
       Iniciar sesión con Google
     </ion-button>
   </ion-item>
+  <!-- Botón Google Identity Services para web -->
+  <div *ngIf="isWeb">
+    <div id="google-signin-btn"></div>
+  </div>
 </ion-content>

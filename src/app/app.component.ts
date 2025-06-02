@@ -16,12 +16,8 @@ export class AppComponent {
 
   initializeApp() {
     this.platform.ready().then(() => {
-      if (Capacitor.getPlatform() === 'web') {
-        GoogleAuth.initialize({
-          clientId: '889927933084-6o5i9bet4eemuovr7de4boa17a5gpkku.apps.googleusercontent.com',
-          scopes: ['profile', 'email'],
-          grantOfflineAccess: false,
-        })
+      if (Capacitor.getPlatform() !== 'web') {
+        GoogleAuth.initialize()
           .then(() => {
             console.log('GoogleAuth inicializado correctamente');
           })
@@ -32,3 +28,9 @@ export class AppComponent {
     })
   }
 }
+
+// {
+//   clientId: '889927933084-6o5i9bet4eemuovr7de4boa17a5gpkku.apps.googleusercontent.com',
+//   scopes: ['profile', 'email'],
+//   grantOfflineAccess: false,
+// }
