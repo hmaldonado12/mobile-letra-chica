@@ -7,6 +7,7 @@ import { FormsModule } from '@angular/forms';
 import {LogoComponent} from "../../../components/logo/logo.component";
 import {SignInGoogleRepositoryService} from "../../infra/rest/sign-in-google-repository.service";
 import { Capacitor } from '@capacitor/core';
+import {AuthGoogleRepositoryService} from "../../infra/rest/auth-google-repository.service";
 
 declare var google: any;
 
@@ -21,11 +22,13 @@ export class LoginPage implements OnInit {
   username: string = '';
   password: string = '';
   isWeb = Capacitor.getPlatform() === 'web';
+  token: string = '';
 
   constructor(
     private router: Router,
     private alertController: AlertController,
     private signInGoogleRepositoryService: SignInGoogleRepositoryService,
+    private authGoogleRepositoryService: AuthGoogleRepositoryService
   ) {}
 
   ngOnInit(): void {
@@ -35,11 +38,11 @@ export class LoginPage implements OnInit {
         if (window.hasOwnProperty('google') && google.accounts && google.accounts.id) {
           google.accounts.id.initialize({
             client_id: '889927933084-6o5i9bet4eemuovr7de4boa17a5gpkku.apps.googleusercontent.com',
-            callback: (response: any) => this.handleCredentialsResponse(response),    
+            callback: (response: any) => this.handleCredentialsResponse(response),
           });
           google.accounts.id.renderButton(
             document.getElementById('google-signin-btn'),
-            { theme: 'outline', size: 'large' } // Personaliza el botón según tus necesidades
+            { theme: 'outline', size: 'large' }
           );
           clearInterval(interval);
         }
@@ -48,7 +51,16 @@ export class LoginPage implements OnInit {
   }
 
   handleCredentialsResponse(response: any) {
-    console.log('ID Token recibido:', response.credential);
+    this.token = response.credential;
+    const responseLetraChica = this.authGoogleRepositoryService.signInWithGoogle(this.token).subscribe({
+      next: (responseLetraChica) => {
+        console.log('✅ Respuesta del backend:', responseLetraChica);
+        this.router.navigateByUrl('/home');
+      },
+      error: (error) => {
+        console.error('❌ Error al enviar el ID Token al backend:', error);
+      }
+    });
   }
 
   async login() {
@@ -71,7 +83,8 @@ export class LoginPage implements OnInit {
     }
     try {
       const user = await this.signInGoogleRepositoryService.signInWithGoogle();
-      console.log('Usuario autenticado:', user.email);
+      const responseLetraChica = this.authGoogleRepositoryService.signInWithGoogle(this.token);
+      console.log('Respuesta del servidor:', responseLetraChica);
     } catch (error: any) {
       if (error.error === 'popup_closed_by_user') {
         console.warn('El usuario cerró la ventana emergente antes de completar el login.');
