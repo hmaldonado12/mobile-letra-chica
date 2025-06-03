@@ -1,0 +1,29 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <!-- No title here -->
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="container">
+    <div class="custom-title">Nuevo Contrato</div>
+    <div class="cards-row">
+      <div class="card-btn">
+        <ion-button expand="block" fill="clear" (click)="onCamera()" class="big-btn">
+          <div class="btn-content">
+            <ion-icon name="camera-outline" class="icon-btn"></ion-icon>
+            <span>Escanear con camara</span>
+          </div>
+        </ion-button>
+      </div>
+      <div class="card-btn">
+        <ion-button expand="block" fill="clear" (click)="onUpload()" class="big-btn">
+          <div class="btn-content">
+            <ion-icon name="cloud-upload-outline" class="icon-btn"></ion-icon>
+            <span>Subir archivo</span>
+          </div>
+        </ion-button>
+      </div>
+    </div>
+  </div>
+</ion-content>
