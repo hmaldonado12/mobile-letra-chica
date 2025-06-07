@@ -15,6 +15,6 @@ export class LaunchScreenPage implements OnInit {
   ngOnInit() {
     setTimeout(() => {
       this.router.navigate(['/login']);
-    }, 1000);
+    }, 5000);
   }
 }
