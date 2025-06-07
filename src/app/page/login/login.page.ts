@@ -8,6 +8,7 @@ import {LogoComponent} from "../../../components/logo/logo.component";
 import {SignInGoogleRepositoryService} from "../../infra/rest/sign-in-google-repository.service";
 import { Capacitor } from '@capacitor/core';
 import {AuthGoogleRepositoryService} from "../../infra/rest/auth-google-repository.service";
+import {SaveInfoSessionService} from "../../infra/rest/save-info-session.service";
 
 declare var google: any;
 
@@ -28,7 +29,8 @@ export class LoginPage implements OnInit {
     private router: Router,
     private alertController: AlertController,
     private signInGoogleRepositoryService: SignInGoogleRepositoryService,
-    private authGoogleRepositoryService: AuthGoogleRepositoryService
+    private authGoogleRepositoryService: AuthGoogleRepositoryService,
+    private saveInfoSessionService: SaveInfoSessionService
   ) {}
 
   ngOnInit(): void {
@@ -54,8 +56,10 @@ export class LoginPage implements OnInit {
     this.token = response.credential;
     const responseLetraChica = this.authGoogleRepositoryService.signInWithGoogle(this.token).subscribe({
       next: (responseLetraChica) => {
+        const userID = responseLetraChica.message;
+        this.saveInfoSessionService.saveSessionInfoByKey("userID", userID);
         console.log('✅ Respuesta del backend:', responseLetraChica);
-        this.router.navigateByUrl('/home');
+        this.router.navigateByUrl('/contracts');
       },
       error: (error) => {
         console.error('❌ Error al enviar el ID Token al backend:', error);
@@ -66,7 +70,7 @@ export class LoginPage implements OnInit {
   async login() {
 
     if (this.username && this.password) {
-      this.router.navigateByUrl('/home');
+      this.router.navigateByUrl('/contracts');
     } else {
       const alert = await this.alertController.create({
         header: 'Error de Login',
