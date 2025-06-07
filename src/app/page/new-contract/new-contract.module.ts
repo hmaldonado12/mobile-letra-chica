@@ -8,4 +8,14 @@ import { NewContractPageRoutingModule } from './new-contract-routing.module';
 
 import { NewContractPage } from './new-contract.page';
 
+@NgModule({
+  imports: [
+    CommonModule,
+    FormsModule,
+    IonicModule,
+    NewContractPageRoutingModule,
+    NewContractPage
+  ],
+  declarations: []
+})
 export class NewContractPageModule {}

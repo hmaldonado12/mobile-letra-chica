@@ -40,4 +40,7 @@ export class ContractsPage implements OnInit {
     this.router.navigate(['/contracts']);
   }
 
+  goNewContract() {
+    this.router.navigate(['/new-contract']);
+  }
 }
