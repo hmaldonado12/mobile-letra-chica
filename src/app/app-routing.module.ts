@@ -8,7 +8,7 @@ import { HomePage } from './page/home/home.page';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'contract-list',
+    redirectTo: 'launch-screen',
     pathMatch: 'full'
   },
   {
