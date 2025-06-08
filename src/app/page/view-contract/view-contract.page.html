@@ -1,0 +1,20 @@
+<ion-content class="resumen-contrato">
+  <div class="container">
+    <ion-card *ngFor="let seccion of resumen">
+      <ion-card-header>
+        <ion-card-title>{{ seccion.icono }} {{ seccion.titulo }}</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ul>
+          <li *ngFor="let punto of seccion.puntos">
+            <strong *ngIf="punto.titulo">{{ punto.titulo }}:</strong> {{ punto.descripcion }}
+          </li>
+        </ul>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-button expand="block" class="guardar-btn">
+      Guardar en carpeta
+    </ion-button>
+  </div>
+</ion-content>
