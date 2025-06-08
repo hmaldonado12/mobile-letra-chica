@@ -11,10 +11,16 @@
     </ion-toolbar>
   </ion-header>
 
+  <ion-searchbar
+    [(ngModel)]="searchTerm"
+    placeholder="Search contracts"
+    showClearButton="always"
+  ></ion-searchbar>
+
   <ion-list>
     <ion-item
-      *ngFor="let item of items"
-      button
+      *ngFor="let item of filteredItems"
+      button="true"
       (click)="openUrl(item.url)"
       class="contract-item"
       lines="none"

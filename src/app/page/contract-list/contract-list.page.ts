@@ -1,31 +1,34 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
-import { CommonModule } from '@angular/common';
-
-interface ContractItem {
-  title: string;
-  date: string;
-  status: string;
-  url: string;
-}
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common'; // <-- Add this import
 
 @Component({
   selector: 'app-contract-list',
   templateUrl: './contract-list.page.html',
   styleUrls: ['./contract-list.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule]
+  imports: [IonicModule, FormsModule, CommonModule]
 })
-export class ContractListPage implements OnInit {
-  items: ContractItem[] = [];
+export class ContractListPage {
+  items = [
+    { title: 'Contract A', date: '2024-06-01', status: 'Active', url: 'https://example.com/a' },
+    { title: 'Contract B', date: '2024-05-15', status: 'Pending', url: 'https://example.com/b' },
+    { title: 'Contract C', date: '2024-04-20', status: 'Expired', url: 'https://example.com/c' }
+  ];
 
-  ngOnInit() {
-    // TODO: Replace with actual data fetching logic
-    this.items = [
-      { title: 'Contract 1', date: '2024-06-01', status: 'Active', url: '/assets/mock-files/contract1.pdf' },
-      { title: 'Contract 2', date: '2024-05-15', status: 'Expired', url: '/assets/mock-files/contract2.docx' },
-      { title: 'Contract 3', date: '2024-04-20', status: 'Pending', url: '/assets/mock-files/contract3.txt' }
-    ];
+  searchTerm: string = '';
+
+  get filteredItems() {
+    if (!this.searchTerm) {
+      return this.items;
+    }
+    const term = this.searchTerm.toLowerCase();
+    return this.items.filter(item =>
+      item.title.toLowerCase().includes(term) ||
+      item.status.toLowerCase().includes(term) ||
+      item.date.includes(term)
+    );
   }
 
   openUrl(url: string) {
