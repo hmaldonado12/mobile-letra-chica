@@ -1,0 +1,31 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Contract List</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Contract List</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-list>
+    <ion-item
+      *ngFor="let item of items"
+      button
+      (click)="openUrl(item.url)"
+      class="contract-item"
+      lines="none"
+    >
+      <ion-label>
+        <strong>{{ item.title }}</strong>
+        <div class="contract-meta">
+          <span class="contract-date">{{ item.date }}</span>
+          <span class="contract-status">{{ item.status }}</span>
+        </div>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>
