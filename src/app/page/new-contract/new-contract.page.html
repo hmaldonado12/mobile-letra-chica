@@ -1,7 +1,5 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <!-- No title here -->
-  </ion-toolbar>
+  <ion-toolbar></ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
@@ -17,12 +15,13 @@
         </ion-button>
       </div>
       <div class="card-btn">
-        <ion-button expand="block" fill="clear" (click)="onUpload()" class="big-btn">
+        <ion-button expand="block" fill="clear" (click)="fileInput.click()" class="big-btn">
           <div class="btn-content">
             <ion-icon name="cloud-upload-outline" class="icon-btn"></ion-icon>
             <span>Subir archivo</span>
           </div>
         </ion-button>
+        <input #fileInput type="file" accept="application/pdf" style="display: none" (change)="onFileSelected($event)" />
       </div>
     </div>
   </div>
