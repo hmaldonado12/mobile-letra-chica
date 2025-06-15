@@ -1,10 +1,13 @@
-import { Component, OnInit } from '@angular/core';
-import {IonicModule} from "@ionic/angular";
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {IonicModule, IonModal} from "@ionic/angular";
 import {CommonModule} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 import {Router} from "@angular/router";
 import {RetrieveCagetoryService} from "../../infra/rest/retrieve-cagetory.service";
 import {RetrieveInfoSessionService} from "../../infra/rest/retrieve-info-session.service";
+import { OverlayEventDetail } from '@ionic/core/components';
+import {CreateCategoryRepositoryService} from "../../infra/rest/create-category-repository.service";
+import {SaveInfoSessionService} from "../../infra/rest/save-info-session.service";
 
 @Component({
   selector: 'app-contracts',
@@ -14,18 +17,63 @@ import {RetrieveInfoSessionService} from "../../infra/rest/retrieve-info-session
   imports: [IonicModule, CommonModule, FormsModule]
 })
 export class ContractsPage implements OnInit {
-
+  @ViewChild(IonModal) modal!: IonModal;
+  name!: string;
   public categories: any[] = [];
-
+  userIdFromSession: string = '';
+  isAlertOpen = false;
+  alertButtons = ['Action'];
 
   constructor(private router: Router,
               private retrieveCategories: RetrieveCagetoryService,
-              private retrieveInfoSession: RetrieveInfoSessionService) {}
+              private retrieveInfoSession: RetrieveInfoSessionService,
+              private saveInfoSession: SaveInfoSessionService,
+              private createCategory: CreateCategoryRepositoryService) {}
 
   ngOnInit(): void {
     const userID = this.retrieveInfoSession.getSessionInfoByKey("userID");
-    console.log("from session", userID);
-    this.retrieveCategories.getUserCategories(userID).subscribe({
+    this.userIdFromSession = userID;
+    this.retrieveCategoriesByUserId(userID);
+  }
+
+  goHome() {
+    this.router.navigate(['/contracts']);
+  }
+
+  goNewContract() {
+    if (this.categories.length === 0) {
+      this.isAlertOpen = true;
+      this.alertButtons = ['OK'];
+      return;
+    }
+    console.log(this.categories)
+    this.saveInfoSession.saveSessionInfoByKey("categoryId", this.categories[0].id);
+    this.router.navigate(['/new-contract']);
+  }
+
+
+  cancel() {
+    this.modal.dismiss(null, 'cancel');
+  }
+
+  confirm() {
+    this.modal.dismiss(this.name, 'confirm');
+  }
+
+  onWillDismiss(event: CustomEvent<OverlayEventDetail>) {
+    if (event.detail.role === 'confirm') {
+      const response = this.createCategory.createCategory(this.userIdFromSession, this.name).subscribe(response => {
+        console.log(response);
+        console.log('Category created successfully:', response);
+        this.retrieveCategoriesByUserId(this.userIdFromSession)
+      });
+      console.log('Modal confirmed with name:', this.name);
+      this.retrieveCategoriesByUserId(this.userIdFromSession)
+    }
+  }
+
+  private retrieveCategoriesByUserId(userIdInput: string) {
+    this.retrieveCategories.getUserCategories(userIdInput).subscribe({
       next: (response) => {
         console.log('Categories retrieved successfully:', response);
         this.categories = response || [];
@@ -36,11 +84,8 @@ export class ContractsPage implements OnInit {
       }
     })
   }
-  goHome() {
-    this.router.navigate(['/contracts']);
-  }
 
-  goNewContract() {
-    this.router.navigate(['/new-contract']);
+  setOpen(isOpen: boolean) {
+    this.isAlertOpen = isOpen;
   }
 }

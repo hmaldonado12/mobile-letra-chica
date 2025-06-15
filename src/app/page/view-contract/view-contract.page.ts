@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {IonicModule} from "@ionic/angular";
 import {RetrieveInfoSessionService} from "../../infra/rest/retrieve-info-session.service";
 import {NgForOf, NgIf} from "@angular/common";
+import {SaveDocumentRepositoryService} from "../../infra/rest/save-document-repository.service";
+import {Router} from "@angular/router";
 
 interface Punto {
   titulo?: string;
@@ -24,12 +26,19 @@ interface Seccion {
 export class ViewContractPage implements OnInit {
 
   public resumen: Seccion[] = [];
+  public tituloGeneral: string = '';
+  isAlertOpen = false;
+  alertButtons = ['Action'];
 
-  constructor(private retrieveInfoSession: RetrieveInfoSessionService) { }
+
+  constructor(private retrieveInfoSession: RetrieveInfoSessionService,
+              private saveDocument: SaveDocumentRepositoryService,
+              private router: Router) { }
 
   ngOnInit() {
     const documentText = this.getDocumentText();
     this.resumen = this.parsearResumen(documentText);
+
     if (documentText) {
       console.log('Document text retrieved:', documentText);
     } else {
@@ -44,53 +53,93 @@ export class ViewContractPage implements OnInit {
 
   parsearResumen(texto: string): Seccion[] {
     const secciones: Seccion[] = [];
-    const bloques = texto.split(/\n\n+/); // separa por párrafos dobles
+    const lineas = texto.split('\n');
 
     let seccionActual: Seccion | null = null;
 
-    for (const bloque of bloques) {
-      const tituloMatch = bloque.match(/\*\*(\d\..*?)\*\*/); // detecta títulos tipo **1. ✅ Puntos Positivos...**
-      if (tituloMatch) {
-        // Si comienza una nueva sección
+    // 🔍 Buscar el título general (línea tipo "**Análisis del Contrato de Alquiler**")
+    for (const linea of lineas) {
+      const tituloPrincipalMatch = linea.trim().match(/^\*\*(?!\d+\.)\s*(.*?)\s*\*\*$/);
+      if (tituloPrincipalMatch) {
+        this.tituloGeneral = tituloPrincipalMatch[1].trim();
+        break; // solo tomamos el primero
+      }
+    }
+
+    for (const linea of lineas) {
+      const trimmed = linea.trim();
+
+      const matchTitulo = trimmed.match(/^\*\*\d+\.\s*(.*?)\*\*/);
+      if (matchTitulo) {
         if (seccionActual) secciones.push(seccionActual);
 
-        const tituloCompleto = tituloMatch[1]; // Ej: 1. ✅ Puntos Positivos...
-        const [icono, ...resto] = tituloCompleto.replace(/^\d+\.\s*/, '').split(' ');
-        const titulo = resto.join(' ').trim();
+        const tituloCompleto = matchTitulo[1];
+        const [icono, ...resto] = tituloCompleto.trim().split(' ');
+        const titulo = resto.join(' ');
 
         seccionActual = {
           icono,
           titulo,
           puntos: []
         };
-      } else if (bloque.trim().startsWith('*')) {
-        // Si es un punto de lista con título
-        const match = bloque.match(/\*\s*\*\*(.*?)\*\*:(.*)/);
-        if (match && seccionActual) {
-          seccionActual.puntos.push({
-            titulo: match[1].trim(),
-            descripcion: match[2].trim()
-          });
-        }
-      } else if (bloque.trim().startsWith('*')) {
-        // Punto sin título
-        const match = bloque.match(/\*\s*(.*)/);
-        if (match && seccionActual) {
-          seccionActual.puntos.push({
-            descripcion: match[1].trim()
-          });
-        }
-      } else if (seccionActual) {
-        // Descripción suelta o resumen final
+        continue;
+      }
+
+      const matchConTitulo = trimmed.match(/^\*\s*\*\*(.*?)\*\*:(.*)/);
+      if (matchConTitulo && seccionActual) {
         seccionActual.puntos.push({
-          descripcion: bloque.trim()
+          titulo: matchConTitulo[1].trim(),
+          descripcion: matchConTitulo[2].trim()
+        });
+        continue;
+      }
+
+      const matchSimple = trimmed.match(/^\*\s+(.*)/);
+      if (matchSimple && seccionActual) {
+        seccionActual.puntos.push({
+          descripcion: matchSimple[1].trim()
+        });
+        continue;
+      }
+
+      if (seccionActual && trimmed !== '') {
+        seccionActual.puntos.push({
+          descripcion: trimmed
         });
       }
     }
 
-    // Agregar la última sección
     if (seccionActual) secciones.push(seccionActual);
-
     return secciones;
+  }
+
+  guardarEnCarpeta(): void {
+    const documentText = this.getDocumentText();
+    if (documentText) {
+      this.saveDocument.saveDocument(
+        this.retrieveInfoSession.getSessionInfoByKey("categoryId") || '',
+        this.tituloGeneral,
+        documentText,
+        this.retrieveInfoSession.getSessionInfoByKey("userID") || '',
+        'successful'
+      ).subscribe({
+        next: (response) => {
+          console.log('Document saved successfully:', response);
+          this.isAlertOpen = true
+          this.alertButtons = ['Ok'];
+          },
+        error: (err) => {
+          console.error('Error saving document:', err);
+        }
+      });
+    } else {
+      console.error('No document text available to save.');
+    }
+  }
+
+
+  setOpen(isOpen: boolean) {
+    this.isAlertOpen = isOpen;
+    this.router.navigate(['/contracts']);
   }
 }
