@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import { Router } from '@angular/router';
 import {IonicModule} from "@ionic/angular";
 
@@ -9,12 +9,12 @@ import {IonicModule} from "@ionic/angular";
   standalone: true,
   imports: [IonicModule]
 })
-export class LaunchScreenPage {
+export class LaunchScreenPage implements OnInit {
   constructor(private router: Router) {}
 
   ngOnInit() {
     setTimeout(() => {
       this.router.navigate(['/login']);
-    }, 4000);
+    }, 1000);
   }
 }
