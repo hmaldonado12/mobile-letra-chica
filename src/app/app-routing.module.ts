@@ -30,6 +30,10 @@ const routes: Routes = [
   {
     path: "new-contract",
     loadChildren: () => import('./page/new-contract/new-contract.module').then(m => m.NewContractPageModule)
+  },
+  {
+    path: 'view-contract',
+    loadChildren: () => import('./page/view-contract/view-contract.module').then( m => m.ViewContractPageModule)
   }
 ];
 

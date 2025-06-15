@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import {DocumentAnalysisRepositoryService} from "../../infra/rest/document-analysis-repository.service";
+import {SaveInfoSessionService} from "../../infra/rest/save-info-session.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-new-contract',
@@ -11,7 +13,9 @@ import {DocumentAnalysisRepositoryService} from "../../infra/rest/document-analy
 })
 export class NewContractPage {
 
-  constructor(private documentAnalysisRepo: DocumentAnalysisRepositoryService) {}
+  constructor(private documentAnalysisRepo: DocumentAnalysisRepositoryService,
+              private saveInfoSession: SaveInfoSessionService,
+              private router: Router) { }
 
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
@@ -20,7 +24,10 @@ export class NewContractPage {
       if (file.type === 'application/pdf') {
         this.documentAnalysisRepo.analyzeDocument(file).subscribe({
           next: (response) => {
+            const textResponse = response.candidates[0].content.parts[0].text;
             console.log('Respuesta del backend:', response.candidates[0].content.parts[0].text);
+            this.saveInfoSession.saveSessionInfoByKey("documentText", textResponse);
+            this.router.navigateByUrl("/view-contract");
           },
           error: (err) => {
             console.error('Error al analizar el documento:', err);
