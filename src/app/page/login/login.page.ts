@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { AlertController, IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import {LogoComponent} from "../../components/logo/logo.component";
+import {LogoComponent} from "../../../components/logo/logo.component";
 
 @Component({
   selector: 'app-login',

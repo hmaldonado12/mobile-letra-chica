@@ -2,8 +2,8 @@ import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
 import { LaunchScreenPage } from './page/launch-screen/launch-screen.page';
-import { LoginPage } from './login/login.page';
-import { HomePage } from './home/home.page';
+import { LoginPage } from './page/login/login.page';
+import { HomePage } from './page/home/home.page';
 
 const routes: Routes = [
   {
@@ -17,11 +17,11 @@ const routes: Routes = [
   },
   {
     path: 'login',
-    loadComponent: () => import('./login/login.page').then(m => m.LoginPage)
+    loadComponent: () => import('./page/login/login.page').then(m => m.LoginPage)
   },
   {
     path: 'home',
-    loadComponent: () => import('./home/home.page').then(m => m.HomePage)
+    loadComponent: () => import('./page/home/home.page').then(m => m.HomePage)
   },
 ];
 
