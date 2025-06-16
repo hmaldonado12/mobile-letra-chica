@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common'; // <-- Add this import
+import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-contract-list',
@@ -12,12 +13,14 @@ import { CommonModule } from '@angular/common'; // <-- Add this import
 })
 export class ContractListPage {
   items = [
-    { title: 'Contract A', date: '2024-06-01', status: 'Active', url: 'https://example.com/a' },
-    { title: 'Contract B', date: '2024-05-15', status: 'Pending', url: 'https://example.com/b' },
-    { title: 'Contract C', date: '2024-04-20', status: 'Expired', url: 'https://example.com/c' }
+    { id: 1, title: 'Contract A', date: '2024-06-01', status: 'Active' },
+    { id: 2, title: 'Contract B', date: '2024-05-15', status: 'Pending' },
+    { id: 3, title: 'Contract C', date: '2024-04-20', status: 'Expired' }
   ];
 
   searchTerm: string = '';
+
+  constructor(private router: Router) {}
 
   get filteredItems() {
     if (!this.searchTerm) {
@@ -31,7 +34,7 @@ export class ContractListPage {
     );
   }
 
-  openUrl(url: string) {
-    window.open(url, '_blank');
+  openContract(id: number) {
+    this.router.navigate(['/contract-list', id]);
   }
 }

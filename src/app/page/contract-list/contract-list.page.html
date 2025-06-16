@@ -1,27 +1,16 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
     <ion-title>Contract List</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Contract List</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
-  <ion-searchbar
-    [(ngModel)]="searchTerm"
-    placeholder="Search contracts"
-    showClearButton="always"
-  ></ion-searchbar>
-
+<ion-content>
+  <ion-searchbar [(ngModel)]="searchTerm" placeholder="Search contracts"></ion-searchbar>
   <ion-list>
     <ion-item
       *ngFor="let item of filteredItems"
       button="true"
-      (click)="openUrl(item.url)"
+      (click)="openContract(item.id)"
       class="contract-item"
       lines="none"
     >

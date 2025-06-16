@@ -1,0 +1,65 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{ title }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="contract-section">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Ventajas del contrato</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ul>
+          <li *ngFor="let v of ventajas" class="ventaja">
+            <ion-icon name="checkmark-circle" class="icon-green"></ion-icon>
+            {{ v }}
+          </li>
+        </ul>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Desventajas del contrato</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ul>
+          <li *ngFor="let d of desventajas" class="desventaja">
+            <ion-icon name="alert-circle" class="icon-yellow"></ion-icon>
+            {{ d }}
+          </li>
+        </ul>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Modificaciones sugeridas</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ul>
+          <li *ngFor="let m of modificaciones" class="modificacion">
+            <ion-icon name="create" class="icon-orange"></ion-icon>
+            {{ m }}
+          </li>
+        </ul>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Cláusulas a eliminar</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ul>
+          <li *ngFor="let c of clausulas" class="clausula">
+            <ion-icon name="close-circle" class="icon-red"></ion-icon>
+            {{ c }}
+          </li>
+        </ul>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>
