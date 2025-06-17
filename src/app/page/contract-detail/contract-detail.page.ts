@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import { RetrieveDocumentService } from '../../infra/rest/retrieve-document.service';
 
 interface Dot {
@@ -25,22 +25,23 @@ interface Secction {
 export class ContractDetailPage implements OnInit {
   public resumen: Secction[] = [];
   public tituloGeneral: string = '';
-  
+
   // @Input() title: string = '';
   // @Input() ventajas: string[] = [];
   // @Input() desventajas: string[] = [];
   // @Input() modificaciones: string[] = [];
   // @Input() clausulas: string[] = [];
-  
+
   constructor(
     private route: ActivatedRoute,
-    private retrieveDocuments: RetrieveDocumentService
+    private retrieveDocuments: RetrieveDocumentService,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
-      this.retrieveDocuments.getCategoryDocuments(id).subscribe(contract => {
+      this.retrieveDocuments.getDocumentById("1234556", id).subscribe(contract => {
         console.log('Contrato recibido:', contract);
         this.resumen = this.parseSummary(contract.summary || '');
         // this.title = constract.title;
@@ -63,7 +64,7 @@ export class ContractDetailPage implements OnInit {
       if (principalTitleMatch) {
         this.tituloGeneral = principalTitleMatch[1].trim();
         break;
-      } 
+      }
     }
 
     for (const line of lines) {
@@ -113,5 +114,9 @@ export class ContractDetailPage implements OnInit {
     if (currentSecction) secctions.push(currentSecction);
 
     return secctions;
+  }
+
+  goHome() {
+    this.router.navigate(['/contracts']);
   }
 }

@@ -66,10 +66,6 @@
 
 <ion-content class="resumen-contrato">
   <div class="container">
-
-    <pre>{{ resumen | json }}</pre>
-    <pre>{{ tituloGeneral }}</pre>
-
     <!-- TÍTULO GENERAL DEL DOCUMENTO -->
     <ion-card *ngIf="tituloGeneral">
       <ion-card-header>
@@ -106,3 +102,11 @@
     </ion-button> -->
   </div>
 </ion-content>
+
+<ion-footer class="footer-with-button">
+  <div class="footer-content">
+    <ion-button class="home-button" (click)="goHome()">
+      <ion-icon slot="icon-only" name="home-outline"></ion-icon>
+    </ion-button>
+  </div>
+</ion-footer>

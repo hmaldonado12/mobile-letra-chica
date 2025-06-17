@@ -109,4 +109,31 @@
     }
   }
 }
+.home-button {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  --background: #003366;
+  --color: white;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
 
+.folder-icon {
+  font-size: 28px;
+  color: #456789;
+}
+
+.footer-with-button {
+  position: relative;
+  height: 60px;
+  background: transparent;
+  border-top: none;
+  box-shadow: none;
+}
+
+.footer-content {
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+}
