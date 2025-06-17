@@ -72,6 +72,10 @@ export class ContractsPage implements OnInit {
     }
   }
 
+  openCategory(categoryId: string) {
+    this.router.navigate(['/contract-list', categoryId]);
+  }
+
   private retrieveCategoriesByUserId(userIdInput: string) {
     this.retrieveCategories.getUserCategories(userIdInput).subscribe({
       next: (response) => {

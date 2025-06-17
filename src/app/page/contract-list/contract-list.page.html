@@ -8,6 +8,21 @@
   <ion-searchbar [(ngModel)]="searchTerm" placeholder="Search contracts"></ion-searchbar>
   <ion-list>
     <ion-item
+      *ngFor="let contract of contracts" 
+      button="true"
+      (click)="openContract(contract.id)"
+      class="contract-item"
+      lines="none"
+    >
+      <ion-label>
+        <strong>{{ contract.title }}</strong>
+        <div class="contract-meta">
+          <span class="contract-date">{{ contract.date }}</span>
+          <span class="contract-status">{{ contract.status }}</span>
+        </div>
+      </ion-label>
+    </ion-item>
+    <!-- <ion-item
       *ngFor="let item of filteredItems"
       button="true"
       (click)="openContract(item.id)"
@@ -21,6 +36,6 @@
           <span class="contract-status">{{ item.status }}</span>
         </div>
       </ion-label>
-    </ion-item>
+    </ion-item> -->
   </ion-list>
 </ion-content>

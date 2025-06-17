@@ -24,7 +24,7 @@
   </ion-grid>
 
   <ion-list class="folder-list">
-    <ion-item *ngFor="let categoria of categories" lines="none">
+    <ion-item *ngFor="let categoria of categories" lines="none" (click)="openCategory(categoria.id)">
       <ion-icon slot="start" name="folder-outline" class="folder-icon"></ion-icon>
       <ion-label>{{ categoria.name }}</ion-label>
     </ion-item>

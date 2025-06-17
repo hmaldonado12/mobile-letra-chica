@@ -4,8 +4,8 @@ import { ContractListPage } from './contract-list.page';
 import { ContractDetailPage } from '../contract-detail/contract-detail.page';
 
 const routes: Routes = [
-  { path: '', component: ContractListPage },
-  { path: ':id', component: ContractDetailPage }
+  { path: ':categoryId', component: ContractListPage },
+  { path: ':categoryId/:id', component: ContractDetailPage }
 ];
 
 @NgModule({

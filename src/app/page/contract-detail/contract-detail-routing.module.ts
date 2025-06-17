@@ -5,8 +5,8 @@ import { ContractDetailPage } from './contract-detail.page';
 
 const routes: Routes = [
   {
-    path: '',
-    component: ContractDetailPage
+    path: ':id',
+    component: ContractDetailPage,
   }
 ];
 
