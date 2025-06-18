@@ -6,10 +6,24 @@
 }
 
 ion-label > strong {
-  color: #1976d2; // Material primary color
+  color: #0d2c5c; // Material primary color
   font-size: 1.1em;
   display: block;
   margin-bottom: 2px;
+}
+
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 120px;
+}
+
+.loader-text {
+  margin-top: 12px;
+  color: #888;
+  font-size: 1.1em;
+  text-align: center;
 }
 
 .contract-meta {
@@ -26,4 +40,8 @@ ion-label > strong {
 
 .contract-status {
   text-align: right;
+}
+
+.no-contracts {
+  justify-content: center;
 }

@@ -1,7 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
-import {ActivatedRoute, Router} from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { RetrieveDocumentService } from '../../infra/rest/retrieve-document.service';
 
 interface Dot {
@@ -9,7 +9,7 @@ interface Dot {
   description: string;
 }
 
-interface Secction {
+interface Section {
   icon: string;
   title: string;
   dots: Dot[];
@@ -23,14 +23,8 @@ interface Secction {
   styleUrls: ['./contract-detail.page.scss']
 })
 export class ContractDetailPage implements OnInit {
-  public resumen: Secction[] = [];
+  public resumen: Section[] = [];
   public tituloGeneral: string = '';
-
-  // @Input() title: string = '';
-  // @Input() ventajas: string[] = [];
-  // @Input() desventajas: string[] = [];
-  // @Input() modificaciones: string[] = [];
-  // @Input() clausulas: string[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -40,29 +34,25 @@ export class ContractDetailPage implements OnInit {
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
-    if (id) {
-      this.retrieveDocuments.getDocumentById("1234556", id).subscribe(contract => {
-        console.log('Contrato recibido:', contract);
+    const categoryId = this.route.snapshot.paramMap.get('categoryId');
+    if (id && categoryId) {
+      this.retrieveDocuments.getDocumentById(categoryId, id).subscribe(contract => {
+        // Parsear el resumen y obtener el título general
         this.resumen = this.parseSummary(contract.summary || '');
-        // this.title = constract.title;
-        // this.ventajas = constract.advantages || [];
-        // this.desventajas = constract.disadvantages || [];
-        // this.modificaciones = constract.modifications || [];
-        // this.clausulas = constract.clauses || [];
       });
     }
   }
 
-  parseSummary(text: string): Secction[] {
-    const secctions: Secction[] = [];
+  parseSummary(text: string): Section[] {
+    const sections: Section[] = [];
     const lines = text.split('\n');
-    let currentSecction: Secction | null = null;
+    let currentSection: Section | null = null;
 
-    // Search general title
+    // Buscar título general (primera línea tipo "**Análisis del Contrato**")
     for (const line of lines) {
-      const principalTitleMatch = line.trim().match(/^\*\*(?!\d+\.)\s*(.*?)\s*\*\*$/);
-      if (principalTitleMatch) {
-        this.tituloGeneral = principalTitleMatch[1].trim();
+      const mainTitleMatch = line.trim().match(/^\*\*(?!\d+\.)\s*(.*?)\s*\*\*$/);
+      if (mainTitleMatch) {
+        this.tituloGeneral = mainTitleMatch[1].trim();
         break;
       }
     }
@@ -70,16 +60,16 @@ export class ContractDetailPage implements OnInit {
     for (const line of lines) {
       const trimmed = line.trim();
 
-      // section title with icon
+      // Título de sección con icono
       const matchTitle = trimmed.match(/^\*\*\d+\.\s*(.*?)\*\*/);
       if (matchTitle) {
-        if (currentSecction) secctions.push(currentSecction);
+        if (currentSection) sections.push(currentSection);
 
         const completeTitle = matchTitle[1];
         const [icon, ...rest] = completeTitle.trim().split(' ');
         const title = rest.join(' ');
 
-        currentSecction = {
+        currentSection = {
           icon,
           title,
           dots: []
@@ -87,33 +77,36 @@ export class ContractDetailPage implements OnInit {
         continue;
       }
 
+      // Punto con título
       const matchWithTitle = trimmed.match(/^\*\s*\*\*(.*?)\*\*:(.*)/);
-      if (matchWithTitle && currentSecction) {
-        currentSecction.dots.push({
+      if (matchWithTitle && currentSection) {
+        currentSection.dots.push({
           title: matchWithTitle[1].trim(),
           description: matchWithTitle[2].trim()
         });
         continue;
       }
 
+      // Punto simple
       const matchSimple = trimmed.match(/^\*\s+(.*)/);
-      if (matchSimple && currentSecction) {
-        currentSecction.dots.push({
+      if (matchSimple && currentSection) {
+        currentSection.dots.push({
           description: matchSimple[1].trim()
         });
         continue;
       }
 
-      if (currentSecction && trimmed !== '') {
-        currentSecction.dots.push({
+      // Línea suelta dentro de sección
+      if (currentSection && trimmed !== '') {
+        currentSection.dots.push({
           description: trimmed
         });
       }
     }
 
-    if (currentSecction) secctions.push(currentSecction);
+    if (currentSection) sections.push(currentSection);
 
-    return secctions;
+    return sections;
   }
 
   goHome() {

@@ -13,15 +13,10 @@ import { RetrieveDocumentService }from '../../infra/rest/retrieve-document.servi
   imports: [IonicModule, FormsModule, CommonModule]
 })
 export class ContractListPage implements OnInit {
-  // items = [
-  //   { id: 1, title: 'Contract A', date: '2024-06-01', status: 'Active' },
-  //   { id: 2, title: 'Contract B', date: '2024-05-15', status: 'Pending' },
-  //   { id: 3, title: 'Contract C', date: '2024-04-20', status: 'Expired' }
-  // ];
   contracts: any[] = [];
   categoryId: string = '';
-
   searchTerm: string = '';
+  isLoading: boolean = false;
 
   constructor(
     private router: Router,
@@ -30,23 +25,29 @@ export class ContractListPage implements OnInit {
   ) {}
 
   ngOnInit(): void {
-      this.categoryId = this.route.snapshot.paramMap.get('categoryId') || '';
-      this.retrieveDocuments.getCategoryDocuments(this.categoryId).subscribe(response => {
-        this.contracts = response.documents || [];
+    this.route.paramMap.subscribe(params => {
+      this.categoryId = params.get('categoryId') || '';
+      this.contracts = [];
+      this.isLoading = true;
+      this.retrieveDocuments.getCategoryDocuments(this.categoryId).subscribe({
+        next: (response) => {
+          this.contracts = response.documents || [];
+          this.isLoading = false;
+        },
+        error: () => {
+          this.isLoading = false;
+        }
       });
+    });
   }
 
-  // get filteredItems() {
-  //   if (!this.searchTerm) {
-  //     return this.items;
-  //   }
-  //   const term = this.searchTerm.toLowerCase();
-  //   return this.items.filter(item =>
-  //     item.title.toLowerCase().includes(term) ||
-  //     item.status.toLowerCase().includes(term) ||
-  //     item.date.includes(term)
-  //   );
-  // }
+  get filteredContracts() {
+    if (!this.searchTerm) return this.contracts;
+    const term = this.searchTerm.toLowerCase();
+    return this.contracts.filter(contract =>
+      (contract.title || '').toLowerCase().includes(term)
+    );
+  }
 
   openContract(contractId: string) {
     this.router.navigate([contractId], { relativeTo: this.route });

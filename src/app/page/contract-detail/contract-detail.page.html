@@ -1,69 +1,3 @@
-<!-- <ion-header>
-  <ion-toolbar>
-    <ion-title>{{ title }}</ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content>
-  <div class="contract-section">
-    <ion-card>
-      <ion-card-header>
-        <ion-card-title>Ventajas del contrato</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <ul>
-          <li *ngFor="let v of ventajas" class="ventaja">
-            <ion-icon name="checkmark-circle" class="icon-green"></ion-icon>
-            {{ v }}
-          </li>
-        </ul>
-      </ion-card-content>
-    </ion-card>
-
-    <ion-card>
-      <ion-card-header>
-        <ion-card-title>Desventajas del contrato</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <ul>
-          <li *ngFor="let d of desventajas" class="desventaja">
-            <ion-icon name="alert-circle" class="icon-yellow"></ion-icon>
-            {{ d }}
-          </li>
-        </ul>
-      </ion-card-content>
-    </ion-card>
-
-    <ion-card>
-      <ion-card-header>
-        <ion-card-title>Modificaciones sugeridas</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <ul>
-          <li *ngFor="let m of modificaciones" class="modificacion">
-            <ion-icon name="create" class="icon-orange"></ion-icon>
-            {{ m }}
-          </li>
-        </ul>
-      </ion-card-content>
-    </ion-card>
-
-    <ion-card>
-      <ion-card-header>
-        <ion-card-title>Cláusulas a eliminar</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <ul>
-          <li *ngFor="let c of clausulas" class="clausula">
-            <ion-icon name="close-circle" class="icon-red"></ion-icon>
-            {{ c }}
-          </li>
-        </ul>
-      </ion-card-content>
-    </ion-card>
-  </div>
-</ion-content> -->
-
 <ion-content class="resumen-contrato">
   <div class="container">
     <!-- TÍTULO GENERAL DEL DOCUMENTO -->
@@ -75,31 +9,22 @@
       </ion-card-header>
     </ion-card>
 
-    <!-- SECCIONES PARSEADAS -->
-    <ion-card *ngFor="let secction of resumen">
+    <!-- SECCIONES PARSEADAS COMO TARJETAS -->
+    <ion-card *ngFor="let section of resumen">
       <ion-card-header>
-        <ion-card-title>{{ secction.icon }} {{ secction.title }}</ion-card-title>
+        <ion-card-title>
+          <span class="section-icon">{{ section.icon }}</span>
+          {{ section.title }}
+        </ion-card-title>
       </ion-card-header>
       <ion-card-content>
         <ul>
-          <li *ngFor="let dot of secction.dots">
+          <li *ngFor="let dot of section.dots">
             <strong *ngIf="dot.title">{{ dot.title }}:</strong> {{ dot.description }}
           </li>
         </ul>
       </ion-card-content>
     </ion-card>
-
-    <!-- <ion-alert
-      [isOpen]="isAlertOpen"
-      header="SUCCESSFUL"
-      message="El contrato se ha guardado correctamente."
-      [buttons]="alertButtons"
-      (didDismiss)="setOpen(false)"
-    ></ion-alert> -->
-
-    <!-- <ion-button expand="block" class="guardar-btn" (click)="guardarEnCarpeta()">
-      Guardar en carpeta
-    </ion-button> -->
   </div>
 </ion-content>
 
