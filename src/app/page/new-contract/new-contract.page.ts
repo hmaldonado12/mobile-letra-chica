@@ -3,6 +3,7 @@ import { IonicModule } from '@ionic/angular';
 import {DocumentAnalysisRepositoryService} from "../../infra/rest/document-analysis-repository.service";
 import {SaveInfoSessionService} from "../../infra/rest/save-info-session.service";
 import {Router} from "@angular/router";
+import {RetrieveInfoSessionService} from "../../infra/rest/retrieve-info-session.service";
 
 @Component({
   selector: 'app-new-contract',
@@ -15,6 +16,7 @@ export class NewContractPage {
 
   constructor(private documentAnalysisRepo: DocumentAnalysisRepositoryService,
               private saveInfoSession: SaveInfoSessionService,
+              private retreiveInfoSession: RetrieveInfoSessionService,
               private router: Router) { }
 
   onFileSelected(event: Event) {
@@ -22,7 +24,8 @@ export class NewContractPage {
     if (input.files && input.files.length > 0) {
       const file = input.files[0];
       if (file.type === 'application/pdf') {
-        this.documentAnalysisRepo.analyzeDocument(file).subscribe({
+        const categoryId = this.retreiveInfoSession.getSessionInfoByKey("categoryId")
+        this.documentAnalysisRepo.analyzeDocument(categoryId, file).subscribe({
           next: (response) => {
             const textResponse = response.candidates[0].content.parts[0].text;
             console.log('Respuesta del backend:', response.candidates[0].content.parts[0].text);

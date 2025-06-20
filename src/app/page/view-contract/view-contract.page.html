@@ -1,5 +1,16 @@
 <ion-content class="resumen-contrato">
   <div class="container">
+
+    <!-- TÍTULO GENERAL DEL DOCUMENTO -->
+    <ion-card *ngIf="tituloGeneral">
+      <ion-card-header>
+        <ion-card-title class="titulo-general">
+          {{ tituloGeneral }}
+        </ion-card-title>
+      </ion-card-header>
+    </ion-card>
+
+    <!-- SECCIONES PARSEADAS -->
     <ion-card *ngFor="let seccion of resumen">
       <ion-card-header>
         <ion-card-title>{{ seccion.icono }} {{ seccion.titulo }}</ion-card-title>
@@ -13,7 +24,15 @@
       </ion-card-content>
     </ion-card>
 
-    <ion-button expand="block" class="guardar-btn">
+    <ion-alert
+      [isOpen]="isAlertOpen"
+      header="SUCCESSFUL"
+      message="El contrato se ha guardado correctamente."
+      [buttons]="alertButtons"
+      (didDismiss)="setOpen(false)"
+    ></ion-alert>
+
+    <ion-button expand="block" class="guardar-btn" (click)="guardarEnCarpeta()">
       Guardar en carpeta
     </ion-button>
   </div>

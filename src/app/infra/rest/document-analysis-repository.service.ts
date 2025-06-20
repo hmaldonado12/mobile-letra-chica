@@ -7,14 +7,15 @@ import { Observable } from 'rxjs';
 })
 export class DocumentAnalysisRepositoryService {
 
-  private apiUrl = 'http://localhost:8081/documents/analyze';
+  private apiUrl = 'http://localhost:8081/categories';
 
   constructor(private http: HttpClient) { }
 
-  analyzeDocument(file: File): Observable<any> {
+  analyzeDocument(categoryId: string, file: File): Observable<any> {
+    const url = `${this.apiUrl}/${categoryId}/documents/analyze`;
     const formData = new FormData();
     formData.append('file', file);
 
-    return this.http.post(this.apiUrl, formData);
+    return this.http.post(url, formData);
   }
 }
