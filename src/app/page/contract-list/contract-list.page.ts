@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common'; // <-- Add this import
+import { CommonModule } from '@angular/common';
+import { Router, ActivatedRoute } from '@angular/router';
+import { RetrieveDocumentService }from '../../infra/rest/retrieve-document.service';
 
 @Component({
   selector: 'app-contract-list',
@@ -10,28 +12,44 @@ import { CommonModule } from '@angular/common'; // <-- Add this import
   standalone: true,
   imports: [IonicModule, FormsModule, CommonModule]
 })
-export class ContractListPage {
-  items = [
-    { title: 'Contract A', date: '2024-06-01', status: 'Active', url: 'https://example.com/a' },
-    { title: 'Contract B', date: '2024-05-15', status: 'Pending', url: 'https://example.com/b' },
-    { title: 'Contract C', date: '2024-04-20', status: 'Expired', url: 'https://example.com/c' }
-  ];
-
+export class ContractListPage implements OnInit {
+  contracts: any[] = [];
+  categoryId: string = '';
   searchTerm: string = '';
+  isLoading: boolean = false;
 
-  get filteredItems() {
-    if (!this.searchTerm) {
-      return this.items;
-    }
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private retrieveDocuments: RetrieveDocumentService
+  ) {}
+
+  ngOnInit(): void {
+    this.route.paramMap.subscribe(params => {
+      this.categoryId = params.get('categoryId') || '';
+      this.contracts = [];
+      this.isLoading = true;
+      this.retrieveDocuments.getCategoryDocuments(this.categoryId).subscribe({
+        next: (response) => {
+          this.contracts = response.documents || [];
+          this.isLoading = false;
+        },
+        error: () => {
+          this.isLoading = false;
+        }
+      });
+    });
+  }
+
+  get filteredContracts() {
+    if (!this.searchTerm) return this.contracts;
     const term = this.searchTerm.toLowerCase();
-    return this.items.filter(item =>
-      item.title.toLowerCase().includes(term) ||
-      item.status.toLowerCase().includes(term) ||
-      item.date.includes(term)
+    return this.contracts.filter(contract =>
+      (contract.title || '').toLowerCase().includes(term)
     );
   }
 
-  openUrl(url: string) {
-    window.open(url, '_blank');
+  openContract(contractId: string) {
+    this.router.navigate([contractId], { relativeTo: this.route });
   }
 }

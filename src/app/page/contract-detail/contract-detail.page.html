@@ -1,0 +1,37 @@
+<ion-content class="resumen-contrato">
+  <div class="container">
+    <!-- TÍTULO GENERAL DEL DOCUMENTO -->
+    <ion-card *ngIf="tituloGeneral">
+      <ion-card-header>
+        <ion-card-title class="titulo-general">
+          {{ tituloGeneral }}
+        </ion-card-title>
+      </ion-card-header>
+    </ion-card>
+
+    <!-- SECCIONES PARSEADAS COMO TARJETAS -->
+    <ion-card *ngFor="let section of resumen">
+      <ion-card-header>
+        <ion-card-title>
+          <span class="section-icon">{{ section.icon }}</span>
+          {{ section.title }}
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ul>
+          <li *ngFor="let dot of section.dots">
+            <strong *ngIf="dot.title">{{ dot.title }}:</strong> {{ dot.description }}
+          </li>
+        </ul>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>
+
+<ion-footer class="footer-with-button">
+  <div class="footer-content">
+    <ion-button class="home-button" (click)="goHome()">
+      <ion-icon slot="icon-only" name="home-outline"></ion-icon>
+    </ion-button>
+  </div>
+</ion-footer>

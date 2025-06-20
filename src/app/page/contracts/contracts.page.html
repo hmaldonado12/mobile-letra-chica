@@ -23,11 +23,25 @@
     </ion-row>
   </ion-grid>
 
-  <ion-list class="folder-list">
-    <ion-item *ngFor="let categoria of categories" lines="none">
-      <ion-icon slot="start" name="folder-outline" class="folder-icon"></ion-icon>
-      <ion-label>{{ categoria.name }}</ion-label>
-    </ion-item>
+  <div *ngIf="isLoading" class="spinner-container">
+    <ion-spinner name="crescent"></ion-spinner>
+  </div>
+
+  <ion-list class="folder-list" *ngIf="!isLoading">
+    <ng-container *ngIf="categories.length > 0; else noCategories">
+      <ion-item *ngFor="let categoria of categories" lines="none" (click)="openCategory(categoria.id)">
+        <ion-icon slot="start" name="folder-outline" class="folder-icon"></ion-icon>
+        <ion-label>{{ categoria.name }}</ion-label>
+      </ion-item>
+    </ng-container>
+    <ng-template #noCategories>
+      <ion-item lines="none" class="no-categories">
+        <ion-icon slot="start" name="folder-outline" class="folder-icon"></ion-icon>
+        <ion-label class="ion-text-center" color="medium">
+          No tienes categorías creadas
+        </ion-label>
+      </ion-item>
+    </ng-template>
   </ion-list>
 
   <ion-alert
@@ -43,11 +57,11 @@
       <ion-header>
         <ion-toolbar>
           <ion-buttons slot="start">
-            <ion-button (click)="cancel()">Cancel</ion-button>
+            <ion-button (click)="cancel()">Cancelar</ion-button>
           </ion-buttons>
-          <ion-title>Welcome</ion-title>
+          <ion-title>Bienvenido</ion-title>
           <ion-buttons slot="end">
-            <ion-button (click)="confirm()" [strong]="true">Confirm</ion-button>
+            <ion-button (click)="confirm()" [strong]="true">Confirmar</ion-button>
           </ion-buttons>
         </ion-toolbar>
       </ion-header>

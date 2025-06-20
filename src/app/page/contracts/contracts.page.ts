@@ -20,6 +20,7 @@ export class ContractsPage implements OnInit {
   @ViewChild(IonModal) modal!: IonModal;
   name!: string;
   public categories: any[] = [];
+  isLoading = false;
   userIdFromSession: string = '';
   isAlertOpen = false;
   alertButtons = ['Action'];
@@ -33,7 +34,21 @@ export class ContractsPage implements OnInit {
   ngOnInit(): void {
     const userID = this.retrieveInfoSession.getSessionInfoByKey("userID");
     this.userIdFromSession = userID;
-    this.retrieveCategoriesByUserId(userID);
+    this.loadingCategories(userID);
+  }
+
+  private loadingCategories(userInput: string) {
+    this.isLoading = true;
+    this.retrieveCategories.getUserCategories(userInput).subscribe({
+      next: (response) => {
+        this.categories = response || [];
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.error('Error retrieving categories:', error);
+        this.isLoading = false;
+      }
+    });
   }
 
   goHome() {
@@ -70,6 +85,10 @@ export class ContractsPage implements OnInit {
       console.log('Modal confirmed with name:', this.name);
       this.retrieveCategoriesByUserId(this.userIdFromSession)
     }
+  }
+
+  openCategory(categoryId: string) {
+    this.router.navigate(['/contract-list', categoryId]);
   }
 
   private retrieveCategoriesByUserId(userIdInput: string) {

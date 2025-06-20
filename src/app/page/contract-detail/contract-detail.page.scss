@@ -1,0 +1,61 @@
+.resumen-contrato {
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --padding-top: 24px;
+
+  .container {
+    font-family: 'Helvetica', sans-serif;
+    color: #0d2c5c;
+
+    h2 {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    ul {
+      list-style-type: disc;
+      padding-left: 20px;
+      margin-bottom: 20px;
+
+      li {
+        font-size: 16px;
+        line-height: 1.5;
+        margin-bottom: 8px;
+
+        strong {
+          font-weight: 700;
+        }
+      }
+    }
+  }
+}
+
+.section-icon {
+  font-size: 1.3em;
+  margin-right: 10px;
+}
+
+.footer-with-button {
+  position: relative;
+  height: 60px;
+  background: transparent;
+  border-top: none;
+  box-shadow: none;
+}
+
+.footer-content {
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.home-button {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  --background: #003366;
+  --color: white;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
