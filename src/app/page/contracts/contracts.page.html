@@ -1,6 +1,10 @@
 <ion-header>
+  <app-user-info-header></app-user-info-header>
   <ion-toolbar>
     <ion-title>Mis contratos</ion-title>
+    <ion-buttons slot="end">
+      <app-theme-toggle></app-theme-toggle>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -82,11 +86,4 @@
 
 
 </ion-content>
-
-<ion-footer class="footer-with-button">
-  <div class="footer-content">
-    <ion-button class="home-button" (click)="goHome()">
-      <ion-icon slot="icon-only" name="home-outline"></ion-icon>
-    </ion-button>
-  </div>
-</ion-footer>
+<app-footer></app-footer>

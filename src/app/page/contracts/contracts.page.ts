@@ -8,13 +8,16 @@ import {RetrieveInfoSessionService} from "../../infra/rest/retrieve-info-session
 import { OverlayEventDetail } from '@ionic/core/components';
 import {CreateCategoryRepositoryService} from "../../infra/rest/create-category-repository.service";
 import {SaveInfoSessionService} from "../../infra/rest/save-info-session.service";
+import {UserInfoHeaderComponent} from "../../components/user-info-header/user-info-header.component";
+import {ThemeToggleComponent} from "../../components/theme-toggle/theme-toggle.component";
+import {AppFooterComponent} from "../../components/app-footer/app-footer.component";
 
 @Component({
   selector: 'app-contracts',
   templateUrl: './contracts.page.html',
   styleUrls: ['./contracts.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule]
+  imports: [IonicModule, CommonModule, FormsModule, UserInfoHeaderComponent, ThemeToggleComponent, AppFooterComponent]
 })
 export class ContractsPage implements OnInit {
   @ViewChild(IonModal) modal!: IonModal;
@@ -73,17 +76,14 @@ export class ContractsPage implements OnInit {
 
   confirm() {
     this.modal.dismiss(this.name, 'confirm');
+    this.retrieveCategoriesByUserId(this.userIdFromSession);
   }
 
   onWillDismiss(event: CustomEvent<OverlayEventDetail>) {
     if (event.detail.role === 'confirm') {
-      const response = this.createCategory.createCategory(this.userIdFromSession, this.name).subscribe(response => {
-        console.log(response);
-        console.log('Category created successfully:', response);
-        this.retrieveCategoriesByUserId(this.userIdFromSession)
+      this.createCategory.createCategory(this.userIdFromSession, this.name).subscribe(response => {
+        this.retrieveCategoriesByUserId(this.userIdFromSession);
       });
-      console.log('Modal confirmed with name:', this.name);
-      this.retrieveCategoriesByUserId(this.userIdFromSession)
     }
   }
 

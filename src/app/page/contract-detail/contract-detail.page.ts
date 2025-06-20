@@ -3,6 +3,9 @@ import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RetrieveDocumentService } from '../../infra/rest/retrieve-document.service';
+import {UserInfoHeaderComponent} from "../../components/user-info-header/user-info-header.component";
+import {ThemeToggleComponent} from "../../components/theme-toggle/theme-toggle.component";
+import { AppFooterComponent } from '../../components/app-footer/app-footer.component';
 
 interface Dot {
   title?: string;
@@ -18,7 +21,7 @@ interface Section {
 @Component({
   selector: 'app-contract-detail',
   standalone: true,
-  imports: [IonicModule, CommonModule],
+  imports: [IonicModule, CommonModule, UserInfoHeaderComponent, ThemeToggleComponent, AppFooterComponent],
   templateUrl: './contract-detail.page.html',
   styleUrls: ['./contract-detail.page.scss']
 })

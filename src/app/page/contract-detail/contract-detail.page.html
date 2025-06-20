@@ -1,3 +1,13 @@
+<ion-header>
+  <app-user-info-header></app-user-info-header>
+  <ion-toolbar>
+    <ion-title>Detalle de contrato</ion-title>
+    <ion-buttons slot="end">
+      <app-theme-toggle></app-theme-toggle>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
 <ion-content class="resumen-contrato">
   <div class="container">
     <!-- TÍTULO GENERAL DEL DOCUMENTO -->
@@ -9,7 +19,6 @@
       </ion-card-header>
     </ion-card>
 
-    <!-- SECCIONES PARSEADAS COMO TARJETAS -->
     <ion-card *ngFor="let section of resumen">
       <ion-card-header>
         <ion-card-title>
@@ -28,10 +37,4 @@
   </div>
 </ion-content>
 
-<ion-footer class="footer-with-button">
-  <div class="footer-content">
-    <ion-button class="home-button" (click)="goHome()">
-      <ion-icon slot="icon-only" name="home-outline"></ion-icon>
-    </ion-button>
-  </div>
-</ion-footer>
+<app-footer></app-footer>

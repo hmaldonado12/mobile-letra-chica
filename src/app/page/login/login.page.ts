@@ -24,6 +24,7 @@ export class LoginPage implements OnInit {
   password: string = '';
   isWeb = Capacitor.getPlatform() === 'web';
   token: string = '';
+  isDarkMode = false;
 
   constructor(
     private router: Router,
@@ -50,11 +51,12 @@ export class LoginPage implements OnInit {
         }
       }, 100);
     }
+    this.isDarkMode = document.body.classList.contains('dark');
   }
 
   handleCredentialsResponse(response: any) {
     this.token = response.credential;
-    const responseLetraChica = this.authGoogleRepositoryService.signInWithGoogle(this.token).subscribe({
+    this.authGoogleRepositoryService.signInWithGoogle(this.token).subscribe({
       next: (responseLetraChica) => {
         const userID = responseLetraChica.message;
         this.saveInfoSessionService.saveSessionInfoByKey("userID", userID);
@@ -70,6 +72,9 @@ export class LoginPage implements OnInit {
   async login() {
 
     if (this.username && this.password) {
+      // Guardar usuario y contraseña en sesión
+      this.saveInfoSessionService.saveSessionInfoByKey('username', this.username);
+      this.saveInfoSessionService.saveSessionInfoByKey('password', this.password);
       this.router.navigateByUrl('/contracts');
     } else {
       const alert = await this.alertController.create({
@@ -87,14 +92,50 @@ export class LoginPage implements OnInit {
     }
     try {
       const user = await this.signInGoogleRepositoryService.signInWithGoogle();
-      const responseLetraChica = this.authGoogleRepositoryService.signInWithGoogle(this.token);
-      console.log('Respuesta del servidor:', responseLetraChica);
+      const token = user.idToken || user.authentication?.idToken;
+      if (!token) {
+        console.error('No se pudo obtener el idToken de Google.');
+        return;
+      }
+      this.authGoogleRepositoryService.signInWithGoogle(token).subscribe({
+        next: (responseLetraChica) => {
+          const userID = responseLetraChica.message;
+          this.saveInfoSessionService.saveSessionInfoByKey("userID", userID);
+          console.log('✅ Respuesta del backend:', responseLetraChica);
+          this.router.navigateByUrl('/contracts');
+        },
+        error: (error) => {
+          console.error('❌ Error al enviar el ID Token al backend:', error);
+        }
+      });
     } catch (error: any) {
       if (error.error === 'popup_closed_by_user') {
         console.warn('El usuario cerró la ventana emergente antes de completar el login.');
       } else {
         console.error('Error al iniciar sesión:', error.message || error);
       }
+    }
+  }
+
+  onGoogleBtnClick() {
+    if (this.isWeb) {
+      // Dispara el flujo de Google Identity Services manualmente
+      if (window.hasOwnProperty('google') && google.accounts && google.accounts.id) {
+        google.accounts.id.prompt();
+      } else {
+        alert('No se pudo cargar el servicio de Google. Intenta recargar la página.');
+      }
+    } else {
+      this.loginWithGoogle();
+    }
+  }
+
+  toggleTheme() {
+    this.isDarkMode = !this.isDarkMode;
+    if (this.isDarkMode) {
+      document.body.classList.add('dark');
+    } else {
+      document.body.classList.remove('dark');
     }
   }
 }

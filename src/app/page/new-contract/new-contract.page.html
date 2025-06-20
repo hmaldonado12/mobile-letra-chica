@@ -1,9 +1,15 @@
-<ion-header [translucent]="true">
-  <ion-toolbar></ion-toolbar>
+<ion-header>
+  <app-user-info-header></app-user-info-header>
+  <ion-toolbar>
+    <ion-title>Nuevo Contrato</ion-title>
+    <ion-buttons slot="end">
+      <app-theme-toggle></app-theme-toggle>
+    </ion-buttons>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <div class="container">
+  <div class="container" *ngIf="!isUploading; else loadingBlock">
     <div class="custom-title">Nuevo Contrato</div>
     <div class="cards-row">
       <div class="card-btn">
@@ -25,4 +31,12 @@
       </div>
     </div>
   </div>
+  <ng-template #loadingBlock>
+    <div class="uploading-container">
+      <ion-spinner name="crescent"></ion-spinner>
+      <div class="uploading-text">Aguardando a que el contrato sea cargado...</div>
+    </div>
+  </ng-template>
 </ion-content>
+
+<app-footer></app-footer>
