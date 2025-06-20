@@ -1,0 +1,29 @@
+.contract-item {
+  border-radius: 16px;
+  margin: 8px 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  --background: #fff;
+}
+
+ion-label > strong {
+  color: #1976d2; // Material primary color
+  font-size: 1.1em;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.contract-meta {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 4px;
+  color: #888;
+  font-size: 0.95em;
+}
+
+.contract-date {
+  text-align: left;
+}
+
+.contract-status {
+  text-align: right;
+}
