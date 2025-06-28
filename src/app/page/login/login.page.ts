@@ -86,33 +86,47 @@ export class LoginPage implements OnInit {
     }
   }
   async loginWithGoogle() {
+    console.log('🔵 Iniciando proceso de login con Google...');
     if (Capacitor.getPlatform() === 'web') {
       alert('Por favor, utiliza la aplicación móvil para iniciar sesión con Google.');
       return;
     }
     try {
+      console.log('🔵 Llamando a signInGoogleRepositoryService.signInWithGoogle()...');
       const user = await this.signInGoogleRepositoryService.signInWithGoogle();
+      console.log('🔵 Usuario obtenido del plugin:', JSON.stringify(user, null, 2));
+      
       const token = user.idToken || user.authentication?.idToken;
+      console.log('🔵 Token extraído:', token ? 'Token encontrado' : 'Token NO encontrado');
+      
       if (!token) {
-        console.error('No se pudo obtener el idToken de Google.');
+        console.error('❌ No se pudo obtener el idToken de Google.');
         return;
       }
+      
+      console.log('🔵 Enviando token al backend...');
       this.authGoogleRepositoryService.signInWithGoogle(token).subscribe({
         next: (responseLetraChica) => {
+          console.log('✅ Respuesta exitosa del backend:', JSON.stringify(responseLetraChica, null, 2));
           const userID = responseLetraChica.message;
           this.saveInfoSessionService.saveSessionInfoByKey("userID", userID);
-          console.log('✅ Respuesta del backend:', responseLetraChica);
+          console.log('✅ UserID guardado:', userID);
+          console.log('🔵 Navegando a /contracts...');
           this.router.navigateByUrl('/contracts');
         },
         error: (error) => {
-          console.error('❌ Error al enviar el ID Token al backend:', error);
+          console.error('❌ Error al enviar el ID Token al backend:', JSON.stringify(error, null, 2));
         }
       });
+      console.log('🔵 Finalizando loginWithGoogle - Todo el flujo completado');
     } catch (error: any) {
+      console.error('❌ Error capturado en loginWithGoogle:', JSON.stringify(error, null, 2));
       if (error.error === 'popup_closed_by_user') {
-        console.warn('El usuario cerró la ventana emergente antes de completar el login.');
+        console.warn('⚠️ El usuario cerró la ventana emergente antes de completar el login.');
+      } else if (error.message && error.message.includes('cancelled')) {
+        console.warn('⚠️ Login cancelado por el usuario.');
       } else {
-        console.error('Error al iniciar sesión:', error.message || error);
+        console.error('❌ Error desconocido al iniciar sesión:', error.message || error);
       }
     }
   }
