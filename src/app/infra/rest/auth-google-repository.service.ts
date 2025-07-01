@@ -13,14 +13,15 @@ export class AuthGoogleRepositoryService {
   constructor(private http: HttpClient) { }
 
   signInWithGoogle(idToken: string): Observable<any> {
-    const baseUrl = environment.apiUrl
-    this.apiUrl = baseUrl + this.apiUrl;
+    const fullUrl = environment.apiUrl + '/auth/google';
     const body = { idToken };
-    console.log('Sending ID Token to server:', idToken);
+    console.log('🌐 URL completa del backend:', fullUrl);
+    console.log('📦 Body de la petición:', JSON.stringify(body));
+    console.log('🔗 Sending ID Token to server:', idToken);
     const headers = { 'Content-Type': 'application/json' };
     const options = {
       headers: headers,
     }
-    return this.http.post(this.apiUrl, body, options);
+    return this.http.post(fullUrl, body, options);
   }
 }

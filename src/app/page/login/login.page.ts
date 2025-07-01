@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { AlertController, IonicModule } from '@ionic/angular';
+import { AlertController, IonicModule, LoadingController } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {LogoComponent} from "../../../components/logo/logo.component";
@@ -25,10 +25,12 @@ export class LoginPage implements OnInit {
   isWeb = Capacitor.getPlatform() === 'web';
   token: string = '';
   isDarkMode = false;
+  isLoading = false;
 
   constructor(
     private router: Router,
     private alertController: AlertController,
+    private loadingController: LoadingController,
     private signInGoogleRepositoryService: SignInGoogleRepositoryService,
     private authGoogleRepositoryService: AuthGoogleRepositoryService,
     private saveInfoSessionService: SaveInfoSessionService
@@ -54,17 +56,37 @@ export class LoginPage implements OnInit {
     this.isDarkMode = document.body.classList.contains('dark');
   }
 
-  handleCredentialsResponse(response: any) {
+  async handleCredentialsResponse(response: any) {
+    const loading = await this.loadingController.create({
+      message: 'Autenticando con Google...',
+      spinner: 'circles'
+    });
+    await loading.present();
+
     this.token = response.credential;
     this.authGoogleRepositoryService.signInWithGoogle(this.token).subscribe({
-      next: (responseLetraChica) => {
+      next: async (responseLetraChica) => {
+        await loading.dismiss();
         const userID = responseLetraChica.message;
         this.saveInfoSessionService.saveSessionInfoByKey("userID", userID);
         console.log('✅ Respuesta del backend:', responseLetraChica);
         this.router.navigateByUrl('/contracts');
       },
-      error: (error) => {
+      error: async (error) => {
+        await loading.dismiss();
         console.error('❌ Error al enviar el ID Token al backend:', error);
+        
+        let errorMessage = 'Error de conexión con el servidor.';
+        if (error.status === 400) {
+          errorMessage = 'Token de Google inválido. Intenta iniciar sesión nuevamente.';
+        }
+        
+        const alert = await this.alertController.create({
+          header: '❌ Error de conexión',
+          message: errorMessage,
+          buttons: ['OK']
+        });
+        await alert.present();
       }
     });
   }
@@ -88,9 +110,22 @@ export class LoginPage implements OnInit {
   async loginWithGoogle() {
     console.log('🔵 Iniciando proceso de login con Google...');
     if (Capacitor.getPlatform() === 'web') {
-      alert('Por favor, utiliza la aplicación móvil para iniciar sesión con Google.');
+      const alert = await this.alertController.create({
+        header: 'Plataforma no compatible',
+        message: 'Por favor, utiliza la aplicación móvil para iniciar sesión con Google.',
+        buttons: ['OK']
+      });
+      await alert.present();
       return;
     }
+    
+    this.isLoading = true;
+    const loading = await this.loadingController.create({
+      message: 'Autenticando con Google...',
+      spinner: 'circles'
+    });
+    await loading.present();
+    
     try {
       console.log('🔵 Llamando a signInGoogleRepositoryService.signInWithGoogle()...');
       const user = await this.signInGoogleRepositoryService.signInWithGoogle();
@@ -100,34 +135,72 @@ export class LoginPage implements OnInit {
       console.log('🔵 Token extraído:', token ? 'Token encontrado' : 'Token NO encontrado');
       
       if (!token) {
+        await loading.dismiss();
+        this.isLoading = false;
         console.error('❌ No se pudo obtener el idToken de Google.');
+        const alert = await this.alertController.create({
+          header: 'Error de autenticación',
+          message: 'No se pudo obtener el token de Google. Intenta nuevamente.',
+          buttons: ['OK']
+        });
+        await alert.present();
         return;
       }
       
       console.log('🔵 Enviando token al backend...');
       this.authGoogleRepositoryService.signInWithGoogle(token).subscribe({
-        next: (responseLetraChica) => {
+        next: async (responseLetraChica) => {
+          await loading.dismiss();
+          this.isLoading = false;
           console.log('✅ Respuesta exitosa del backend:', JSON.stringify(responseLetraChica, null, 2));
           const userID = responseLetraChica.message;
           this.saveInfoSessionService.saveSessionInfoByKey("userID", userID);
           console.log('✅ UserID guardado:', userID);
+          
+          // Navegar directamente sin mostrar alert adicional
           console.log('🔵 Navegando a /contracts...');
           this.router.navigateByUrl('/contracts');
         },
-        error: (error) => {
+        error: async (error) => {
+          await loading.dismiss();
+          this.isLoading = false;
           console.error('❌ Error al enviar el ID Token al backend:', JSON.stringify(error, null, 2));
+          
+          let errorMessage = 'Error de conexión con el servidor.';
+          if (error.status === 0) {
+            errorMessage = 'No se pudo conectar con el servidor. Verifica tu conexión a internet y que el backend esté funcionando.';
+          } else if (error.status === 400) {
+            errorMessage = 'Token de Google inválido. Intenta iniciar sesión nuevamente.';
+          } else if (error.status >= 500) {
+            errorMessage = 'Error interno del servidor. Intenta más tarde.';
+          }
+          
+          const alert = await this.alertController.create({
+            header: '❌ Error de conexión',
+            message: errorMessage,
+            buttons: ['OK']
+          });
+          await alert.present();
         }
       });
       console.log('🔵 Finalizando loginWithGoogle - Todo el flujo completado');
     } catch (error: any) {
+      await loading.dismiss();
+      this.isLoading = false;
       console.error('❌ Error capturado en loginWithGoogle:', JSON.stringify(error, null, 2));
-      if (error.error === 'popup_closed_by_user') {
-        console.warn('⚠️ El usuario cerró la ventana emergente antes de completar el login.');
-      } else if (error.message && error.message.includes('cancelled')) {
+      
+      if (error.error === 'popup_closed_by_user' || 
+          (error.message && error.message.includes('cancelled'))) {
         console.warn('⚠️ Login cancelado por el usuario.');
-      } else {
-        console.error('❌ Error desconocido al iniciar sesión:', error.message || error);
+        return; // No mostrar alerta si el usuario canceló
       }
+      
+      const alert = await this.alertController.create({
+        header: '❌ Error de login',
+        message: 'Error desconocido al iniciar sesión.',
+        buttons: ['OK']
+      });
+      await alert.present();
     }
   }
 

@@ -4,8 +4,9 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'http://192.168.0.59:8080',
-  // apiUrl: 'https://backend-letra-chica-production.up.railway.app',
+  // Para desarrollo local: usar ngrok o configurar HTTPS en el backend
+  // Ejemplo: apiUrl: 'https://tu-url-ngrok.ngrok-free.app',
+  apiUrl: 'https://backend-letra-chica-production.up.railway.app', // URL de producción como fallback
 };
 
 /*

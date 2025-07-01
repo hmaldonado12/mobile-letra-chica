@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { RetrieveInfoSessionService } from './retrieve-info-session.service';
-import { GoogleAuthWebViewService } from './google-auth-webview.service';
+import { FirebaseAuthService } from './firebase-auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,43 +9,56 @@ export class SignInGoogleRepositoryService {
 
   constructor(
     private session: RetrieveInfoSessionService,
-    private googleAuthWebView: GoogleAuthWebViewService
+    private firebaseAuth: FirebaseAuthService
   ) {}
 
   async signInWithGoogle(): Promise<any> {
     try {
-      console.log('🚀 Iniciando login con Google...');
+      console.log('🔥 Iniciando login con Firebase Auth...');
       
-      const response = await this.googleAuthWebView.signInWithGoogle();
+      const result = await this.firebaseAuth.signInWithGoogle();
       
-      console.log('✅ Respuesta de GoogleAuthWebView:', JSON.stringify(response, null, 2));
+      if (!result) {
+        throw new Error('Login cancelado por el usuario');
+      }
+
+      const user = result.user;
+      const idToken = result.idToken;
       
-      const userName = response.profile?.name || response.profile?.givenName || '';
-      this.session.setSessionInfoByKey('googleUsername', userName);
-      console.log('📧 Email del usuario:', response.profile?.email);
-      console.log('👤 Nombre del usuario:', userName);
+      // Guardar información en sesión
+      this.session.setSessionInfoByKey('googleUsername', user.displayName || '');
+      console.log('📧 Email del usuario:', user.email);
+      console.log('👤 Nombre del usuario:', user.displayName);
+      console.log('🔑 ID Token obtenido');
       
-      // Retornar los datos en el formato esperado por el resto de tu aplicación
-      const result = {
-        name: response.profile?.name,
-        givenName: response.profile?.givenName,
-        email: response.profile?.email,
-        idToken: response.idToken,
-        profile: response.profile
+      // Retornar datos en el formato esperado por el resto de la aplicación
+      return {
+        idToken: idToken,
+        email: user.email,
+        name: user.displayName,
+        givenName: user.displayName?.split(' ')[0] || '',
+        familyName: user.displayName?.split(' ')[1] || '',
+        imageUrl: user.photoURL,
+        uid: user.uid,
+        // Para compatibilidad con el código existente
+        authentication: {
+          idToken: idToken
+        }
       };
       
-      console.log('🎉 Login exitoso, retornando:', JSON.stringify(result, null, 2));
-      return result;
-        
-    } catch (error) {
-      console.error('❌ Error en login con Google:', error);
-      console.error('❌ Detalles del error:', JSON.stringify(error, null, 2));
+    } catch (error: any) {
+      console.error('❌ Error en login con Firebase:', error);
       throw error;
     }
   }
 
   async signOut() {
-    // Para WebView no necesitamos logout específico
-    console.log('🚪 Logout de Google (WebView)');
+    try {
+      await this.firebaseAuth.signOut();
+      console.log('🚪 Logout de Firebase completado');
+    } catch (error) {
+      console.error('❌ Error en logout Firebase:', error);
+      throw error;
+    }
   }
 }

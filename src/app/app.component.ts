@@ -14,7 +14,7 @@ export class AppComponent {
 
   initializeApp() {
     this.platform.ready().then(() => {
-      console.log('App inicializada con nueva implementación WebView');
+      console.log('App inicializada con autenticación nativa de Google');
     });
   }
 }
