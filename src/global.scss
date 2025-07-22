@@ -35,3 +35,59 @@
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import "@ionic/angular/css/palettes/dark.system.css";
+
+body, html, ion-app {
+  font-family: 'Poppins', Arial, Helvetica, sans-serif !important;
+  background: var(--ion-background-color);
+  color: var(--ion-text-color);
+}
+
+h1, .ion-title, ion-title {
+  font-family: 'Poppins', Arial, Helvetica, sans-serif;
+  font-weight: 700;
+  font-size: 2.2rem;
+  color: var(--ion-color-primary);
+  letter-spacing: 0.01em;
+}
+
+h2, h3, h4, h5, h6 {
+  font-family: 'Poppins', Arial, Helvetica, sans-serif;
+  font-weight: 600;
+  color: var(--ion-color-secondary);
+}
+
+ion-button, button {
+  font-family: 'Poppins', Arial, Helvetica, sans-serif;
+  font-weight: 600;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  letter-spacing: 0.03em;
+  box-shadow: 0 2px 8px rgba(26,35,126,0.08);
+  transition: background 0.2s, color 0.2s;
+}
+
+ion-card {
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(26,35,126,0.10);
+}
+
+ion-content {
+  --background: var(--ion-background-color);
+}
+
+/* Mejora de inputs */
+ion-input, input, textarea {
+  font-family: 'Poppins', Arial, Helvetica, sans-serif;
+  font-size: 1rem;
+  border-radius: 8px;
+}
+
+/* Colores de enlaces */
+a {
+  color: var(--ion-color-tertiary);
+  text-decoration: none;
+  font-weight: 600;
+}
+a:hover {
+  text-decoration: underline;
+}

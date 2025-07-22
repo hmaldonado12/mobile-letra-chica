@@ -7,6 +7,9 @@ import { IonicModule } from '@ionic/angular';
 import { ContractsPageRoutingModule } from './contracts-routing.module';
 
 import { ContractsPage } from './contracts.page';
+import { AppFooterComponent } from 'src/app/components/app-footer/app-footer.component';
+import { ThemeToggleComponent } from 'src/app/components/theme-toggle/theme-toggle.component';
+import { UserInfoHeaderComponent } from 'src/app/components/user-info-header/user-info-header.component';
 
 @NgModule({
   imports: [
@@ -14,8 +17,10 @@ import { ContractsPage } from './contracts.page';
     FormsModule,
     IonicModule,
     ContractsPageRoutingModule,
-    ContractsPage
-  ],
-  declarations: []
+    ContractsPage,
+    AppFooterComponent,
+    ThemeToggleComponent,
+    UserInfoHeaderComponent
+  ]
 })
 export class ContractsPageModule {}

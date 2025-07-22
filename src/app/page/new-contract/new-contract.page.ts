@@ -4,15 +4,20 @@ import {DocumentAnalysisRepositoryService} from "../../infra/rest/document-analy
 import {SaveInfoSessionService} from "../../infra/rest/save-info-session.service";
 import {Router} from "@angular/router";
 import {RetrieveInfoSessionService} from "../../infra/rest/retrieve-info-session.service";
+import {UserInfoHeaderComponent} from "../../components/user-info-header/user-info-header.component";
+import {ThemeToggleComponent} from "../../components/theme-toggle/theme-toggle.component";
+import { AppFooterComponent } from '../../components/app-footer/app-footer.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-new-contract',
   templateUrl: './new-contract.page.html',
   styleUrls: ['./new-contract.page.scss'],
   standalone: true,
-  imports: [IonicModule]
+  imports: [IonicModule, UserInfoHeaderComponent, ThemeToggleComponent, AppFooterComponent, CommonModule]
 })
 export class NewContractPage {
+  isUploading = false;
 
   constructor(private documentAnalysisRepo: DocumentAnalysisRepositoryService,
               private saveInfoSession: SaveInfoSessionService,
@@ -24,15 +29,18 @@ export class NewContractPage {
     if (input.files && input.files.length > 0) {
       const file = input.files[0];
       if (file.type === 'application/pdf') {
+        this.isUploading = true;
         const categoryId = this.retreiveInfoSession.getSessionInfoByKey("categoryId")
         this.documentAnalysisRepo.analyzeDocument(categoryId, file).subscribe({
           next: (response) => {
             const textResponse = response.candidates[0].content.parts[0].text;
             console.log('Respuesta del backend:', response.candidates[0].content.parts[0].text);
             this.saveInfoSession.saveSessionInfoByKey("documentText", textResponse);
+            this.isUploading = false;
             this.router.navigateByUrl("/view-contract");
           },
           error: (err) => {
+            this.isUploading = false;
             console.error('Error al analizar el documento:', err);
           }
         });

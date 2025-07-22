@@ -4,6 +4,9 @@ import {RetrieveInfoSessionService} from "../../infra/rest/retrieve-info-session
 import {NgForOf, NgIf} from "@angular/common";
 import {SaveDocumentRepositoryService} from "../../infra/rest/save-document-repository.service";
 import {Router} from "@angular/router";
+import {UserInfoHeaderComponent} from "../../components/user-info-header/user-info-header.component";
+import {ThemeToggleComponent} from "../../components/theme-toggle/theme-toggle.component";
+import {AppFooterComponent} from "../../components/app-footer/app-footer.component";
 
 interface Punto {
   titulo?: string;
@@ -21,7 +24,7 @@ interface Seccion {
   templateUrl: './view-contract.page.html',
   styleUrls: ['./view-contract.page.scss'],
   standalone: true,
-  imports: [IonicModule, NgForOf, NgIf]
+  imports: [IonicModule, NgForOf, NgIf, UserInfoHeaderComponent, ThemeToggleComponent, AppFooterComponent]
 })
 export class ViewContractPage implements OnInit {
 

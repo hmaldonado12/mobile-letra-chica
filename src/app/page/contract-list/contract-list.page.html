@@ -1,21 +1,25 @@
 <ion-header>
+  <app-user-info-header></app-user-info-header>
   <ion-toolbar>
     <ion-title>Lista de contratos</ion-title>
+    <ion-buttons slot="end">
+      <app-theme-toggle></app-theme-toggle>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <ion-searchbar [(ngModel)]="searchTerm" placeholder="Buscar contratos"></ion-searchbar>
-  
+
   <div *ngIf="isLoading" class="spinner-container">
     <ion-spinner name="crescent"></ion-spinner>
     <div class="loader-text">Obteniendo contratos de la categoría...</div>
   </div>
-  
+
   <ion-list *ngIf="!isLoading">
     <ng-container *ngIf="filteredContracts.length > 0; else noContracts">
       <ion-item
-        *ngFor="let contract of filteredContracts" 
+        *ngFor="let contract of filteredContracts"
         button="true"
         (click)="openContract(contract.id)"
         class="contract-item"
@@ -39,3 +43,10 @@
     </ng-template>
   </ion-list>
 </ion-content>
+
+<app-footer>
+  <ion-button expand="block" color="danger" (click)="confirmDeleteCategory()">
+    <ion-icon name="trash-outline" slot="start"></ion-icon>
+    Eliminar categoría
+  </ion-button>
+</app-footer>
