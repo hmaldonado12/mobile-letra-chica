@@ -1,0 +1,40 @@
+<ion-header>
+  <app-user-info-header></app-user-info-header>
+  <ion-toolbar>
+    <ion-title>Detalle de contrato</ion-title>
+    <ion-buttons slot="end">
+      <app-theme-toggle></app-theme-toggle>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="resumen-contrato">
+  <div class="container">
+    <!-- TÍTULO GENERAL DEL DOCUMENTO -->
+    <ion-card *ngIf="tituloGeneral">
+      <ion-card-header>
+        <ion-card-title class="titulo-general">
+          {{ tituloGeneral }}
+        </ion-card-title>
+      </ion-card-header>
+    </ion-card>
+
+    <ion-card *ngFor="let section of resumen">
+      <ion-card-header>
+        <ion-card-title>
+          <span class="section-icon">{{ section.icon }}</span>
+          {{ section.title }}
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ul>
+          <li *ngFor="let dot of section.dots">
+            <strong *ngIf="dot.title">{{ dot.title }}:</strong> {{ dot.description }}
+          </li>
+        </ul>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>
+
+<app-footer></app-footer>

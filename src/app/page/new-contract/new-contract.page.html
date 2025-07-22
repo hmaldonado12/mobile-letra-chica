@@ -1,0 +1,42 @@
+<ion-header>
+  <app-user-info-header></app-user-info-header>
+  <ion-toolbar>
+    <ion-title>Nuevo Contrato</ion-title>
+    <ion-buttons slot="end">
+      <app-theme-toggle></app-theme-toggle>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="container" *ngIf="!isUploading; else loadingBlock">
+    <div class="custom-title">Nuevo Contrato</div>
+    <div class="cards-row">
+      <div class="card-btn">
+        <ion-button expand="block" fill="clear" (click)="onCamera()" class="big-btn">
+          <div class="btn-content">
+            <ion-icon name="camera-outline" class="icon-btn"></ion-icon>
+            <span>Escanear con camara</span>
+          </div>
+        </ion-button>
+      </div>
+      <div class="card-btn">
+        <ion-button expand="block" fill="clear" (click)="fileInput.click()" class="big-btn">
+          <div class="btn-content">
+            <ion-icon name="cloud-upload-outline" class="icon-btn"></ion-icon>
+            <span>Subir archivo</span>
+          </div>
+        </ion-button>
+        <input #fileInput type="file" accept="application/pdf" style="display: none" (change)="onFileSelected($event)" />
+      </div>
+    </div>
+  </div>
+  <ng-template #loadingBlock>
+    <div class="uploading-container">
+      <ion-spinner name="crescent"></ion-spinner>
+      <div class="uploading-text">Aguardando a que el contrato sea cargado...</div>
+    </div>
+  </ng-template>
+</ion-content>
+
+<app-footer></app-footer>

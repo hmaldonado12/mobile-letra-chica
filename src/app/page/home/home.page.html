@@ -1,0 +1,18 @@
+<ion-header>
+  <app-user-info-header></app-user-info-header>
+  <ion-toolbar>
+    <ion-title>Bienvenido a Home</ion-title>
+    <ion-buttons slot="end">
+      <app-theme-toggle></app-theme-toggle>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <h1>¡Has iniciado sesión exitosamente!</h1>
+  <p>Este es tu contenido principal.</p>
+
+  <ion-button expand="block" (click)="logout()">Cerrar Sesión</ion-button>
+</ion-content>
+
+<app-footer></app-footer>

@@ -1,16 +1,37 @@
-<ion-content class="login-page">
-  <div class="center-content">
-    <h1>Login</h1>
-    <form (ngSubmit)="onLogin()">
-      <ion-item>
-        <ion-label position="floating">Email</ion-label>
-        <ion-input type="email"></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label position="floating">Password</ion-label>
-        <ion-input type="password"></ion-input>
-      </ion-item>
-      <ion-button expand="block" type="submit">Login</ion-button>
-    </form>
-  </div>
+<ion-header>
+  <app-logo></app-logo>
+  <ion-toolbar>
+    <ion-title>Iniciar Sesión</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="toggleTheme()">
+        <ion-icon [name]="isDarkMode ? 'moon' : 'sunny'" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding login-content">
+  <form (ngSubmit)="login()">
+    <ion-item>
+      <ion-label position="floating">Usuario</ion-label>
+      <ion-input type="text" [(ngModel)]="username" name="username" required></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Contraseña</ion-label>
+      <ion-input type="password" [(ngModel)]="password" name="password" required></ion-input>
+    </ion-item>
+    <ion-button expand="block" type="submit" class="ion-margin-top main-btn">Iniciar Sesión</ion-button>
+  </form>
+  <ion-item lines="none" class="google-btn-item">
+    <ng-container *ngIf="isWeb; else mobileGoogleBtn">
+      <div id="google-signin-btn" class="google-btn-web"></div>
+    </ng-container>
+    <ng-template #mobileGoogleBtn>
+      <ion-button expand="block" color="light" (click)="loginWithGoogle()" class="google-btn">
+        <ion-icon name="logo-google" slot="start"></ion-icon>
+        Iniciar sesión con Google
+      </ion-button>
+    </ng-template>
+  </ion-item>
 </ion-content>

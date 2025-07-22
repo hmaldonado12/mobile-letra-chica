@@ -1,9 +1,17 @@
-import { Router } from '@angular/router';
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
-export class LoginPage {
-  constructor(private router: Router) {}
+import { IonicModule } from '@ionic/angular';
 
-  onLogin() {
-    this.router.navigate(['/home']);
-  }
-}
+import { LoginPageRoutingModule } from './login-routing.module';
+
+@NgModule({
+  imports: [
+    CommonModule,
+    FormsModule,
+    IonicModule,
+    LoginPageRoutingModule
+  ],
+})
+export class LoginPageModule {}

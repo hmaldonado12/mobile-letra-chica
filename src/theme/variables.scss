@@ -1,2 +1,36 @@
 // For information on how to create your own theme, please see:
 // http://ionicframework.com/docs/theming/
+
+/* Light Theme */
+:root {
+  --ion-color-primary: #1a237e; /* Material Indigo 900 */
+  --ion-color-primary-rgb: 26, 35, 126;
+  --ion-color-secondary: #1976d2; /* Material Blue 700 */
+  --ion-color-tertiary: #00bcd4; /* Material Cyan 500 */
+  --ion-color-success: #388e3c; /* Material Green 700 */
+  --ion-color-warning: #ffa000; /* Material Amber 700 */
+  --ion-color-danger: #d32f2f; /* Material Red 700 */
+  --ion-color-dark: #212121; /* Material Grey 900 */
+  --ion-color-medium: #757575; /* Material Grey 600 */
+  --ion-color-light: #f5f5f5; /* Material Grey 100 */
+
+  --ion-background-color: #f5f5f5; /* Material Grey 100 */
+  --ion-text-color: #212121; /* Material Grey 900 */
+}
+
+/* Dark Theme */
+body.dark {
+  --ion-color-primary: #90caf9; /* Material Blue 200 */
+  --ion-color-primary-rgb: 144,202,249;
+  --ion-color-secondary: #64b5f6; /* Material Blue 300 */
+  --ion-color-tertiary: #4dd0e1; /* Material Cyan 300 */
+  --ion-color-success: #66bb6a; /* Material Green 400 */
+  --ion-color-warning: #ffd54f; /* Material Amber 300 */
+  --ion-color-danger: #e57373; /* Material Red 300 */
+  --ion-color-dark: #e0e0e0; /* Material Grey 300 */
+  --ion-color-medium: #bdbdbd; /* Material Grey 400 */
+  --ion-color-light: #212121; /* Material Grey 900 */
+
+  --ion-background-color: #121212; /* Material true black */
+  --ion-text-color: #e0e0e0; /* Material Grey 300 */
+}

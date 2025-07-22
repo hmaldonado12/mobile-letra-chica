@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "889927933084",
+    "project_id": "letrachica-460216",
+    "storage_bucket": "letrachica-460216.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:889927933084:android:58c8436ecde42b33ffa159",
+        "android_client_info": {
+          "package_name": "io.ionic.starter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "889927933084-46ddd2ngoomn04qc7e6s1tiq12hn3t8b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.ionic.starter",
+            "certificate_hash": "3ff93186a7097708d2f031f1a29caa726bc5cab7"
+          }
+        },
+        {
+          "client_id": "889927933084-c213n51cnolov6ec0rgo40579fstqahb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDMprn6uGRVyKq2_jV1iO2x0ViTa1NRSyQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "889927933084-6o5i9bet4eemuovr7de4boa17a5gpkku.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "889927933084-l4ji3g3875eavmo5a63idlj63m4l2tko.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "io.ionic.starter"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

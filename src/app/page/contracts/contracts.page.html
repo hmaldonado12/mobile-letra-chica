@@ -1,0 +1,89 @@
+<ion-header>
+  <app-user-info-header></app-user-info-header>
+  <ion-toolbar>
+    <ion-title>Mis contratos</ion-title>
+    <ion-buttons slot="end">
+      <app-theme-toggle></app-theme-toggle>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <ion-grid>
+    <ion-row>
+      <ion-col size="6">
+        <ion-button   expand="block" class="custom-button" (click)="goNewContract()">
+          <ion-icon slot="start" name="camera-outline"></ion-icon>
+          Nuevo contrato
+        </ion-button>
+      </ion-col>
+      <ion-col size="6">
+        <ion-button id="open-modal" expand="block" class="custom-button">
+          <ion-icon slot="start" name="add-outline"></ion-icon>
+          Nueva categoría
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <div *ngIf="isLoading" class="spinner-container">
+    <ion-spinner name="crescent"></ion-spinner>
+  </div>
+
+  <ion-list class="folder-list" *ngIf="!isLoading">
+    <ng-container *ngIf="categories.length > 0; else noCategories">
+      <ion-item *ngFor="let categoria of categories" lines="none" (click)="openCategory(categoria.id)">
+        <ion-icon slot="start" name="folder-outline" class="folder-icon"></ion-icon>
+        <ion-label>{{ categoria.name }}</ion-label>
+      </ion-item>
+    </ng-container>
+    <ng-template #noCategories>
+      <ion-item lines="none" class="no-categories">
+        <ion-icon slot="start" name="folder-outline" class="folder-icon"></ion-icon>
+        <ion-label class="ion-text-center" color="medium">
+          No tienes categorías creadas
+        </ion-label>
+      </ion-item>
+    </ng-template>
+  </ion-list>
+
+  <ion-alert
+    [isOpen]="isAlertOpen"
+    header="ALERTA"
+    message="Se debe crear una categoría antes de crear un contrato."
+    [buttons]="alertButtons"
+    (didDismiss)="setOpen(false)"
+  ></ion-alert>
+
+  <ion-modal trigger="open-modal" (willDismiss)="onWillDismiss($event)">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-buttons slot="start">
+            <ion-button (click)="cancel()">Cancelar</ion-button>
+          </ion-buttons>
+          <ion-title>Bienvenido</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="confirm()" [strong]="true">Confirmar</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <ion-item>
+          <ion-input
+            label="Ingresar nombre de la categoría"
+            labelPlacement="stacked"
+            type="text"
+            placeholder="nombre de la categoría"
+            [(ngModel)]="name"
+          ></ion-input>
+        </ion-item>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
+
+
+</ion-content>
+<app-footer></app-footer>

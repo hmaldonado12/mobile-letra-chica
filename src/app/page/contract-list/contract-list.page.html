@@ -1,0 +1,52 @@
+<ion-header>
+  <app-user-info-header></app-user-info-header>
+  <ion-toolbar>
+    <ion-title>Lista de contratos</ion-title>
+    <ion-buttons slot="end">
+      <app-theme-toggle></app-theme-toggle>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-searchbar [(ngModel)]="searchTerm" placeholder="Buscar contratos"></ion-searchbar>
+
+  <div *ngIf="isLoading" class="spinner-container">
+    <ion-spinner name="crescent"></ion-spinner>
+    <div class="loader-text">Obteniendo contratos de la categoría...</div>
+  </div>
+
+  <ion-list *ngIf="!isLoading">
+    <ng-container *ngIf="filteredContracts.length > 0; else noContracts">
+      <ion-item
+        *ngFor="let contract of filteredContracts"
+        button="true"
+        (click)="openContract(contract.id)"
+        class="contract-item"
+        lines="none"
+      >
+        <ion-label>
+          <strong>{{ contract.title || 'Contrato sin título' }}</strong>
+          <div class="contract-meta">
+            <span class="contract-date">{{ contract.date || '' }}</span>
+            <span class="contract-status">{{ contract.status === 'analyzed' ? 'analizado' : contract.status }}</span>
+          </div>
+        </ion-label>
+      </ion-item>
+    </ng-container>
+    <ng-template #noContracts>
+      <ion-item lines="none" class="contract-item no-contracts">
+        <ion-label>
+          No hay contratos disponibles en esta categoría
+        </ion-label>
+      </ion-item>
+    </ng-template>
+  </ion-list>
+</ion-content>
+
+<app-footer>
+  <ion-button expand="block" color="danger" (click)="confirmDeleteCategory()">
+    <ion-icon name="trash-outline" slot="start"></ion-icon>
+    Eliminar categoría
+  </ion-button>
+</app-footer>

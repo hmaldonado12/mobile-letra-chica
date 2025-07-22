@@ -1,0 +1,51 @@
+<ion-header>
+  <app-user-info-header></app-user-info-header>
+  <ion-toolbar>
+    <ion-title>Ver Contrato</ion-title>
+    <ion-buttons slot="end">
+      <app-theme-toggle></app-theme-toggle>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="resumen-contrato">
+  <div class="container">
+
+    <!-- TÍTULO GENERAL DEL DOCUMENTO -->
+    <ion-card *ngIf="tituloGeneral">
+      <ion-card-header>
+        <ion-card-title class="titulo-general">
+          {{ tituloGeneral }}
+        </ion-card-title>
+      </ion-card-header>
+    </ion-card>
+
+    <!-- SECCIONES PARSEADAS -->
+    <ion-card *ngFor="let seccion of resumen">
+      <ion-card-header>
+        <ion-card-title>{{ seccion.icono }} {{ seccion.titulo }}</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ul>
+          <li *ngFor="let punto of seccion.puntos">
+            <strong *ngIf="punto.titulo">{{ punto.titulo }}:</strong> {{ punto.descripcion }}
+          </li>
+        </ul>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-alert
+      [isOpen]="isAlertOpen"
+      header="SUCCESSFUL"
+      message="El contrato se ha guardado correctamente."
+      [buttons]="alertButtons"
+      (didDismiss)="setOpen(false)"
+    ></ion-alert>
+
+    <ion-button expand="block" class="guardar-btn" (click)="guardarEnCarpeta()">
+      Guardar en carpeta
+    </ion-button>
+  </div>
+</ion-content>
+
+<app-footer></app-footer>
