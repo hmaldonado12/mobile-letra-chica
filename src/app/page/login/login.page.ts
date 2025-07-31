@@ -42,7 +42,7 @@ export class LoginPage implements OnInit {
       const interval = setInterval(() => {
         if (window.hasOwnProperty('google') && google.accounts && google.accounts.id) {
           google.accounts.id.initialize({
-            client_id: '889927933084-6o5i9bet4eemuovr7de4boa17a5gpkku.apps.googleusercontent.com',
+            client_id: '889927933084-c213n51cnolov6ec0rgo40579fstqahb.apps.googleusercontent.com',
             callback: (response: any) => this.handleCredentialsResponse(response),
           });
           google.accounts.id.renderButton(
