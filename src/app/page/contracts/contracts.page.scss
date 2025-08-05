@@ -1,69 +1,65 @@
+// 📄 Contracts Page - Estilos específicos (Optimizado)
+// ===================================================
+
+@use '../../../theme/shared-variables.scss' as vars;
+
+// Título de la página
 ion-title {
-  font-size: 24px;
-  font-weight: bold;
+  font-size: vars.$font-size-xxl;
+  font-weight: vars.$font-weight-bold;
 }
 
-.custom-button {
-  --background: #003366;
+// Botón flotante de agregar
+.add-category-fab {
+  --background: #{vars.$primary-color};
   --color: white;
   height: 80px;
-  font-size: 16px;
-  text-transform: none;
-  border-radius: 20px;
+  width: 80px;
+  margin-top: vars.$spacing-xl;
 }
 
-.folder-list {
-  margin-top: 20px;
+// Lista de categorías
+.category-list {
+  padding: vars.$spacing-md;
+  
+  ion-item {
+    margin-bottom: vars.$spacing-sm;
+    border-radius: vars.$border-radius-md;
+    
+    .category-header {
+      display: flex;
+      align-items: center;
+      
+      ion-icon {
+        font-size: 24px;
+        color: vars.$primary-color;
+        margin-right: vars.$spacing-sm;
+      }
+      
+      .category-info {
+        flex: 1;
+        
+        .category-name {
+          font-size: vars.$font-size-xl;
+          font-weight: vars.$font-weight-semibold;
+          color: vars.$primary-color;
+        }
+        
+        .category-description {
+          font-size: vars.$font-size-md;
+          color: vars.$text-secondary;
+          margin-top: vars.$spacing-sm;
+        }
+      }
+    }
+  }
 }
 
-ion-item {
-  background: #e6f0ff;
-  border-radius: 15px;
-  margin-bottom: 10px;
-  padding: 12px 16px;
-}
-
-.spinner-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 120px;
-}
-
-.folder-icon {
-  font-size: 28px;
-  color: #456789;
-}
-
-.no-categories {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: calc(100vh - 200px);
-  text-align: center;
-}
-
-.footer-with-button {
-  position: relative;
-  height: 60px;
-  background: transparent;
-  border-top: none;
-  box-shadow: none;
-}
-
-.footer-content {
-  position: absolute;
-  top: -30px;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.home-button {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  --background: #003366;
+// Fab de home
+.home-fab {
+  --background: #{vars.$primary-color};
   --color: white;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  height: 60px;
+  width: 60px;
+  border-radius: vars.$border-radius-round;
 }

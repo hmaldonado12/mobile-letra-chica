@@ -1,3 +1,6 @@
+/* @use rules must come first */
+@use "./theme/shared-variables.scss" as vars;
+
 /*
  * App Global CSS
  * ----------------------------------------------------------------------------

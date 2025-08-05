@@ -19,7 +19,7 @@
         </ion-button>
       </ion-col>
       <ion-col size="6">
-        <ion-button id="open-modal" expand="block" class="custom-button">
+        <ion-button expand="block" class="custom-button" (click)="showCreateCategoryAlert()">
           <ion-icon slot="start" name="add-outline"></ion-icon>
           Nueva categoría
         </ion-button>
@@ -50,40 +50,11 @@
 
   <ion-alert
     [isOpen]="isAlertOpen"
-    header="ALERTA"
-    message="Se debe crear una categoría antes de crear un contrato."
+    header="¡Necesitas una categoría!"
+    message="Para crear un contrato, primero debes crear al menos una categoría para organizarlo."
     [buttons]="alertButtons"
     (didDismiss)="setOpen(false)"
   ></ion-alert>
-
-  <ion-modal trigger="open-modal" (willDismiss)="onWillDismiss($event)">
-    <ng-template>
-      <ion-header>
-        <ion-toolbar>
-          <ion-buttons slot="start">
-            <ion-button (click)="cancel()">Cancelar</ion-button>
-          </ion-buttons>
-          <ion-title>Bienvenido</ion-title>
-          <ion-buttons slot="end">
-            <ion-button (click)="confirm()" [strong]="true">Confirmar</ion-button>
-          </ion-buttons>
-        </ion-toolbar>
-      </ion-header>
-      <ion-content class="ion-padding">
-        <ion-item>
-          <ion-input
-            label="Ingresar nombre de la categoría"
-            labelPlacement="stacked"
-            type="text"
-            placeholder="nombre de la categoría"
-            [(ngModel)]="name"
-          ></ion-input>
-        </ion-item>
-      </ion-content>
-    </ng-template>
-  </ion-modal>
-
-
 
 </ion-content>
 <app-footer></app-footer>

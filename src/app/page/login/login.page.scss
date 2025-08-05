@@ -1,63 +1,53 @@
+// Login page - estilos específicos solamente
+@use '/src/theme/shared-variables.scss' as vars;
+
 .login-content {
   background: var(--ion-background-color);
   color: var(--ion-text-color);
   min-height: 100vh;
 }
 
-ion-item, ion-label, ion-input {
-  --background: transparent;
-  --color: var(--ion-text-color);
-}
-
 .main-btn, .google-btn {
   --background: var(--ion-color-primary);
   --color: #fff;
   font-weight: 600;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  border-radius: vars.$border-radius-sm;
+  box-shadow: vars.$shadow-light;
   width: 100%;
   min-height: 48px;
-  font-size: 16px;
+  font-size: vars.$font-size-md;
+  display: flex;
   justify-content: center;
+  align-items: center;
 }
 
 .google-btn-item {
-  margin-top: 12px;
+  margin-top: vars.$spacing-md;
   background: transparent;
   --background: transparent;
   box-shadow: none;
 }
 
 .google-btn {
-  display: flex;
-  align-items: center;
   --background: var(--ion-background-color);
   --color: var(--ion-text-color);
   border: 1px solid var(--ion-color-step-150);
-  margin-top: 12px;
-}
-
-.google-btn ion-icon {
-  font-size: 20px;
-  margin-right: 8px;
+  margin-top: vars.$spacing-md;
+  
+  ion-icon {
+    font-size: 20px;
+    margin-right: vars.$spacing-sm;
+  }
 }
 
 .google-btn-web-container {
   display: flex;
   justify-content: center;
-  margin-top: 12px;
+  margin-top: vars.$spacing-md;
 }
 
 .google-btn-web {
   min-width: 100%;
   display: flex;
   justify-content: center;
-}
-
-ion-title, .login-content h1, .login-content p {
-  color: var(--ion-text-color, #222) !important;
-}
-
-ion-toolbar {
-  --background: var(--ion-background-color);
 }

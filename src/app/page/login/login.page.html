@@ -11,27 +11,47 @@
 </ion-header>
 
 <ion-content class="ion-padding login-content">
-  <form (ngSubmit)="login()">
-    <ion-item>
-      <ion-label position="floating">Usuario</ion-label>
-      <ion-input type="text" [(ngModel)]="username" name="username" required></ion-input>
+  <div *ngIf="!showRegister; else registerForm">
+    <form (ngSubmit)="login()">
+      <ion-item>
+        <ion-label position="floating">Email</ion-label>
+        <ion-input type="email" [(ngModel)]="username" name="username" required pattern="^[^@]+@[^@]+\.[^@]+$"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Contraseña</ion-label>
+        <ion-input type="password" [(ngModel)]="password" name="password" required minlength="6"></ion-input>
+      </ion-item>
+      <ion-button expand="block" type="submit" class="ion-margin-top main-btn">Iniciar Sesión</ion-button>
+    </form>
+    <ion-item lines="none" class="google-btn-item">
+      <ng-container *ngIf="isWeb; else mobileGoogleBtn">
+        <div id="google-signin-btn" class="google-btn-web"></div>
+      </ng-container>
+      <ng-template #mobileGoogleBtn>
+        <ion-button expand="block" color="light" (click)="loginWithGoogle()" class="google-btn">
+          <ion-icon name="logo-google" slot="start"></ion-icon>
+          Iniciar sesión con Google
+        </ion-button>
+      </ng-template>
     </ion-item>
-
-    <ion-item>
-      <ion-label position="floating">Contraseña</ion-label>
-      <ion-input type="password" [(ngModel)]="password" name="password" required></ion-input>
-    </ion-item>
-    <ion-button expand="block" type="submit" class="ion-margin-top main-btn">Iniciar Sesión</ion-button>
-  </form>
-  <ion-item lines="none" class="google-btn-item">
-    <ng-container *ngIf="isWeb; else mobileGoogleBtn">
-      <div id="google-signin-btn" class="google-btn-web"></div>
-    </ng-container>
-    <ng-template #mobileGoogleBtn>
-      <ion-button expand="block" color="light" (click)="loginWithGoogle()" class="google-btn">
-        <ion-icon name="logo-google" slot="start"></ion-icon>
-        Iniciar sesión con Google
-      </ion-button>
-    </ng-template>
-  </ion-item>
+    <ion-button expand="block" fill="clear" (click)="toggleRegister()">¿No tienes cuenta? Regístrate</ion-button>
+  </div>
+  <ng-template #registerForm>
+    <form (ngSubmit)="register()">
+      <ion-item>
+        <ion-label position="floating">Nombre</ion-label>
+        <ion-input type="text" [(ngModel)]="name" name="name" required minlength="2"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Email</ion-label>
+        <ion-input type="email" [(ngModel)]="email" name="email" required pattern="^[^@]+@[^@]+\.[^@]+$"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Contraseña</ion-label>
+        <ion-input type="password" [(ngModel)]="regPassword" name="regPassword" required minlength="6"></ion-input>
+      </ion-item>
+      <ion-button expand="block" type="submit" class="ion-margin-top main-btn">Registrarse</ion-button>
+    </form>
+    <ion-button expand="block" fill="clear" (click)="toggleRegister()">¿Ya tienes cuenta? Inicia sesión</ion-button>
+  </ng-template>
 </ion-content>

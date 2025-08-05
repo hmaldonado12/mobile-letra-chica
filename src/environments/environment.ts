@@ -4,9 +4,7 @@
 
 export const environment = {
   production: false,
-  // Para desarrollo local: usar ngrok o configurar HTTPS en el backend
-  // Ejemplo: apiUrl: 'https://tu-url-ngrok.ngrok-free.app',
-  apiUrl: 'https://backend-letra-chica-production.up.railway.app', // URL de producción como fallback
+  apiUrl: 'https://backend-letra-chica.onrender.com',
 };
 
 /*

@@ -1,16 +1,19 @@
+// View Contract page - estilos específicos solamente
+@use '/src/theme/shared-variables.scss' as vars;
+
 .resumen-contrato {
-  --padding-start: 16px;
-  --padding-end: 16px;
-  --padding-top: 24px;
+  --padding-start: #{vars.$spacing-lg};
+  --padding-end: #{vars.$spacing-lg};
+  --padding-top: #{vars.$spacing-xxl};
 
   .container {
     font-family: 'Helvetica', sans-serif;
-    color: #0d2c5c;
+    color: vars.$primary-color;
 
     h2 {
-      font-size: 22px;
-      font-weight: 700;
-      margin-bottom: 16px;
+      font-size: vars.$font-size-xxl;
+      font-weight: vars.$font-weight-bold;
+      margin-bottom: vars.$spacing-lg;
     }
 
     ul {
@@ -19,19 +22,19 @@
       margin-bottom: 20px;
 
       li {
-        font-size: 16px;
+        font-size: vars.$font-size-md;
         line-height: 1.5;
-        margin-bottom: 8px;
+        margin-bottom: vars.$spacing-sm;
 
         strong {
-          font-weight: 700;
+          font-weight: vars.$font-weight-bold;
         }
       }
     }
 
     .precio {
-      font-size: 16px;
-      margin-bottom: 24px;
+      font-size: vars.$font-size-md;
+      margin-bottom: vars.$spacing-xxl;
 
       span {
         font-weight: 600;
@@ -39,12 +42,13 @@
     }
 
     .guardar-btn {
-      --background: #0d2c5c;
+      --background: #{vars.$primary-color};
       --color: white;
-      border-radius: 12px;
-      font-size: 16px;
-      font-weight: 600;
+      border-radius: vars.$border-radius-md;
+      font-size: vars.$font-size-md;
+      font-weight: vars.$font-weight-semibold;
       height: 48px;
+      width: 100%;
     }
   }
 }

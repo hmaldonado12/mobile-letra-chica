@@ -18,9 +18,8 @@ export class SaveDocumentRepositoryService {
     userId: string,
     status: string = 'successful'
   ): Observable<any> {
-    const baseUrl = environment.apiUrl
-    this.apiUrl = baseUrl + this.apiUrl;
-    const url = `${this.apiUrl}/${categoryId}/documents`;
+    const baseUrl = environment.apiUrl;
+    const url = `${baseUrl}/categories/${categoryId}/documents`;
     const body = {
       title,
       summary,

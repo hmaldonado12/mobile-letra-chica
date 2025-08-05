@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import {environment} from "../../../environments/environment";
 
@@ -18,7 +18,13 @@ export class AuthGoogleRepositoryService {
     console.log('🌐 URL completa del backend:', fullUrl);
     console.log('📦 Body de la petición:', JSON.stringify(body));
     console.log('🔗 Sending ID Token to server:', idToken);
-    const headers = { 'Content-Type': 'application/json' };
+    
+    // Headers para evitar la página de advertencia de ngrok
+    const headers = new HttpHeaders({
+      'ngrok-skip-browser-warning': 'true',
+      'Content-Type': 'application/json'
+    });
+    
     const options = {
       headers: headers,
     }

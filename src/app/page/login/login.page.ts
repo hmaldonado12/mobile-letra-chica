@@ -9,6 +9,7 @@ import {SignInGoogleRepositoryService} from "../../infra/rest/sign-in-google-rep
 import { Capacitor } from '@capacitor/core';
 import {AuthGoogleRepositoryService} from "../../infra/rest/auth-google-repository.service";
 import {SaveInfoSessionService} from "../../infra/rest/save-info-session.service";
+import { AuthService } from '../../infra/rest/auth.service';
 
 declare var google: any;
 
@@ -22,10 +23,14 @@ declare var google: any;
 export class LoginPage implements OnInit {
   username: string = '';
   password: string = '';
+  name: string = '';
+  email: string = '';
+  regPassword: string = '';
   isWeb = Capacitor.getPlatform() === 'web';
   token: string = '';
   isDarkMode = false;
   isLoading = false;
+  showRegister = false;
 
   constructor(
     private router: Router,
@@ -33,7 +38,8 @@ export class LoginPage implements OnInit {
     private loadingController: LoadingController,
     private signInGoogleRepositoryService: SignInGoogleRepositoryService,
     private authGoogleRepositoryService: AuthGoogleRepositoryService,
-    private saveInfoSessionService: SaveInfoSessionService
+    private saveInfoSessionService: SaveInfoSessionService,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -92,20 +98,129 @@ export class LoginPage implements OnInit {
   }
 
   async login() {
-
-    if (this.username && this.password) {
-      // Guardar usuario y contraseña en sesión
-      this.saveInfoSessionService.saveSessionInfoByKey('username', this.username);
-      this.saveInfoSessionService.saveSessionInfoByKey('password', this.password);
-      this.router.navigateByUrl('/contracts');
-    } else {
+    if (!this.username.match(/^[^@]+@[^@]+\.[^@]+$/)) {
       const alert = await this.alertController.create({
         header: 'Error de Login',
-        message: 'Por favor, ingresa un usuario y contraseña.',
+        message: 'Ingresa un email válido.',
         buttons: ['OK'],
       });
       await alert.present();
+      return;
     }
+    if (!this.password || this.password.length < 6) {
+      const alert = await this.alertController.create({
+        header: 'Error de Login',
+        message: 'La contraseña debe tener al menos 6 caracteres.',
+        buttons: ['OK'],
+      });
+      await alert.present();
+      return;
+    }
+    const loading = await this.loadingController.create({
+      message: 'Iniciando sesión...',
+      spinner: 'circles'
+    });
+    await loading.present();
+    this.authService.login(this.username, this.password).subscribe({
+      next: async (response) => {
+        await loading.dismiss();
+        if (response.token) {
+          this.saveInfoSessionService.saveSessionInfoByKey('token', response.token);
+          this.saveInfoSessionService.saveSessionInfoByKey('userID', response.message);
+          this.router.navigateByUrl('/contracts');
+        } else {
+          const alert = await this.alertController.create({
+            header: 'Error de Login',
+            message: response.message || 'Credenciales inválidas.',
+            buttons: ['OK'],
+          });
+          await alert.present();
+        }
+      },
+      error: async (error) => {
+        await loading.dismiss();
+        const alert = await this.alertController.create({
+          header: 'Error de Login',
+          message: 'No se pudo conectar con el servidor o credenciales inválidas.',
+          buttons: ['OK'],
+        });
+        await alert.present();
+      }
+    });
+  }
+
+  async register() {
+    if (!this.name.trim()) {
+      const alert = await this.alertController.create({
+        header: 'Error de registro',
+        message: 'El nombre es obligatorio.',
+        buttons: ['OK'],
+      });
+      await alert.present();
+      return;
+    }
+    if (!this.email.match(/^[^@]+@[^@]+\.[^@]+$/)) {
+      const alert = await this.alertController.create({
+        header: 'Error de registro',
+        message: 'Ingresa un email válido.',
+        buttons: ['OK'],
+      });
+      await alert.present();
+      return;
+    }
+    if (!this.regPassword || this.regPassword.length < 6) {
+      const alert = await this.alertController.create({
+        header: 'Error de registro',
+        message: 'La contraseña debe tener al menos 6 caracteres.',
+        buttons: ['OK'],
+      });
+      await alert.present();
+      return;
+    }
+    const loading = await this.loadingController.create({
+      message: 'Registrando usuario...',
+      spinner: 'circles'
+    });
+    await loading.present();
+    this.authService.register(this.name, this.email, this.regPassword).subscribe({
+      next: async (response) => {
+        await loading.dismiss();
+        if (response.message && response.message.includes('exitosamente')) {
+          this.saveInfoSessionService.saveSessionInfoByKey('userID', response.userId || response.message);
+          const alert = await this.alertController.create({
+            header: 'Registro exitoso',
+            message: response.message,
+            buttons: ['OK'],
+          });
+          await alert.present();
+          this.showRegister = false;
+        } else {
+          const alert = await this.alertController.create({
+            header: 'Error de registro',
+            message: response.message || 'No se pudo registrar el usuario.',
+            buttons: ['OK'],
+          });
+          await alert.present();
+        }
+      },
+      error: async (error) => {
+        await loading.dismiss();
+        let msg = 'No se pudo conectar con el servidor.';
+        if (error.status === 409) {
+          msg = 'El usuario ya está registrado.';
+        }
+        const alert = await this.alertController.create({
+          header: 'Error de registro',
+          message: msg,
+          buttons: ['OK'],
+        });
+        await alert.present();
+      }
+    });
+  }
+
+  toggleRegister() {
+    this.showRegister = !this.showRegister;
   }
   async loginWithGoogle() {
     console.log('🔵 Iniciando proceso de login con Google...');
