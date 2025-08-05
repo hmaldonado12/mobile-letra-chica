@@ -17,9 +17,9 @@
   </div>
 
   <ion-list *ngIf="!isLoading">
-    <ng-container *ngIf="filteredContracts.length > 0; else noContracts">
+    <ng-container *ngIf="contracts.length > 0; else noContracts">
       <ion-item
-        *ngFor="let contract of filteredContracts"
+        *ngFor="let contract of contracts"
         button="true"
         (click)="openContract(contract.id)"
         class="contract-item"

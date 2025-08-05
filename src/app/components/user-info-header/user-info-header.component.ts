@@ -16,7 +16,7 @@ import { Subscription } from 'rxjs';
     IonicModule
   ],
   styles: [`ion-toolbar {
-    font-size: 14px;
+    font-size: 5px;
   }`]
 })
 export class UserInfoHeaderComponent implements OnInit, OnDestroy {

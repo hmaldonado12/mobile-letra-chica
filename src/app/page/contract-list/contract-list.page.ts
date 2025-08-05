@@ -35,15 +35,18 @@ export class ContractListPage implements OnInit {
       this.categoryId = params.get('categoryId') || '';
       this.contracts = [];
       this.isLoading = true;
-      this.retrieveDocuments.getCategoryDocuments(this.categoryId).subscribe({
+      this.retrieveDocuments.getDocumentById(this.categoryId, this.categoryId).subscribe({
         next: (response) => {
-          this.contracts = response.documents || [];
+          console.log(response);
+          this.contracts.push(response);
+          console.log("contracts", this.contracts);
           this.isLoading = false;
         },
         error: () => {
           this.isLoading = false;
         }
       });
+      console.log("after",this.contracts);
     });
   }
 
