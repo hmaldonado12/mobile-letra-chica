@@ -33,7 +33,7 @@
 
   <ion-list class="folder-list" *ngIf="!isLoading">
     <ng-container *ngIf="categories.length > 0; else noCategories">
-      <ion-item *ngFor="let categoria of categories" lines="none" (click)="openCategory(categoria.id)">
+      <ion-item *ngFor="let categoria of categories" lines="none" (click)="openCategory(categoria)">
         <ion-icon slot="start" name="folder-outline" class="folder-icon"></ion-icon>
         <ion-label>{{ categoria.name }}</ion-label>
       </ion-item>
@@ -82,8 +82,6 @@
       </ion-content>
     </ng-template>
   </ion-modal>
-
-
 
 </ion-content>
 <app-footer></app-footer>

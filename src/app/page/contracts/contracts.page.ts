@@ -1,5 +1,5 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {IonicModule, IonModal} from "@ionic/angular";
+import {AlertController, IonicModule, IonModal} from "@ionic/angular";
 import {CommonModule} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 import {Router} from "@angular/router";
@@ -26,13 +26,14 @@ export class ContractsPage implements OnInit {
   isLoading = false;
   userIdFromSession: string = '';
   isAlertOpen = false;
-  alertButtons = ['Action'];
+  alertButtons = ['Ok'];
 
   constructor(private router: Router,
               private retrieveCategories: RetrieveCagetoryService,
               private retrieveInfoSession: RetrieveInfoSessionService,
               private saveInfoSession: SaveInfoSessionService,
-              private createCategory: CreateCategoryRepositoryService) {}
+              private createCategory: CreateCategoryRepositoryService,
+              private alertController: AlertController) {}
 
   ngOnInit(): void {
     const userID = this.retrieveInfoSession.getSessionInfoByKey("userID");
@@ -45,6 +46,7 @@ export class ContractsPage implements OnInit {
     this.retrieveCategories.getUserCategories(userInput).subscribe({
       next: (response) => {
         this.categories = response || [];
+        console.log(response);
         this.isLoading = false;
       },
       error: (error) => {
@@ -60,8 +62,10 @@ export class ContractsPage implements OnInit {
 
   goNewContract() {
     if (this.categories.length === 0) {
-      this.isAlertOpen = true;
-      this.alertButtons = ['OK'];
+      this.presentAlert().then(alert => {
+        console.log('Alert presented:', alert);
+      });
+      console.log("No categories found");
       return;
     }
     console.log(this.categories)
@@ -81,15 +85,29 @@ export class ContractsPage implements OnInit {
 
   onWillDismiss(event: CustomEvent<OverlayEventDetail>) {
     if (event.detail.role === 'confirm') {
+      this.userIdFromSession = this.retrieveInfoSession.getSessionInfoByKey("userID");
+      console.log(this.userIdFromSession);
+      console.log(this.name)
       this.createCategory.createCategory(this.userIdFromSession, this.name).subscribe(response => {
+        console.log(response);
         this.retrieveCategoriesByUserId(this.userIdFromSession);
       });
+      this.name = '';
+      location.reload();
     }
   }
 
-  openCategory(categoryId: string) {
-    this.router.navigate(['/contract-list', categoryId]);
+  openCategory(category: any) {
+    if (category.documents.length > 0 ) {
+      const index = category.documents.length - 1;
+      this.router.navigate(['/contract-list', category.documents[index].id]);
+      return;
+    }
+    this.presentAlertContracts().then(alert => {
+      console.log('Alert presented:', alert);
+    })
   }
+
 
   private retrieveCategoriesByUserId(userIdInput: string) {
     this.retrieveCategories.getUserCategories(userIdInput).subscribe({
@@ -106,5 +124,22 @@ export class ContractsPage implements OnInit {
 
   setOpen(isOpen: boolean) {
     this.isAlertOpen = isOpen;
+  }
+  async presentAlert() {
+    const alert = await this.alertController.create({
+      header: 'ALERTA',
+      message: 'Se debe crear una categoría antes de crear un contrato.',
+      buttons: this.alertButtons,
+    });
+    await alert.present();
+  }
+
+  async presentAlertContracts() {
+    const alert = await this.alertController.create({
+      header: 'ALERTA',
+      message: 'Esta carpeta no tiene contratos asociados.',
+      buttons: this.alertButtons,
+    });
+    await alert.present();
   }
 }

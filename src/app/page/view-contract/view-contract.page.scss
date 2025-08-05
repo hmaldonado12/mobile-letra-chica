@@ -3,6 +3,8 @@
   --padding-end: 16px;
   --padding-top: 24px;
 
+  padding-bottom: 80px;
+
   .container {
     font-family: 'Helvetica', sans-serif;
     color: #0d2c5c;
@@ -46,5 +48,13 @@
       font-weight: 600;
       height: 48px;
     }
+
+    padding-bottom: 60px;
+
   }
+}
+
+app-footer {
+  z-index: 10;
+  position: relative; /* o static si no necesitas fijo */
 }

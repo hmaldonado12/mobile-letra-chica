@@ -33,6 +33,9 @@
         </ul>
       </ion-card-content>
     </ion-card>
+    <ion-button id="open-modal" expand="block" slot="fixed" class="guardar-btn">
+      Guardar en carpeta
+    </ion-button>
 
     <ion-alert
       [isOpen]="isAlertOpen"
@@ -41,11 +44,34 @@
       [buttons]="alertButtons"
       (didDismiss)="setOpen(false)"
     ></ion-alert>
-
-    <ion-button expand="block" class="guardar-btn" (click)="guardarEnCarpeta()">
-      Guardar en carpeta
-    </ion-button>
   </div>
+  <ion-modal
+    trigger="open-modal"
+    [initialBreakpoint]="0.25"
+    [breakpoints]="[0, 0.25, 0.5, 0.75, 1]"
+    [expandToScroll]="false"
+  >
+    <ng-template>
+      <ion-content>
+        <ion-list *ngFor="let catgory of categories">
+          <ion-item>
+            <ion-checkbox
+              slot="end"
+              [checked]="catgory.selected"
+              (ionChange)="onCheckboxChange(catgory.id, $event)">
+            </ion-checkbox>
+            <ion-label>
+              <h2>{{catgory.name}}</h2>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
 </ion-content>
 
-<app-footer></app-footer>
+
+
+<ion-footer>
+  <app-footer ></app-footer>
+</ion-footer>
