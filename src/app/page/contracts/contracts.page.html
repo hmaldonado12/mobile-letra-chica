@@ -33,9 +33,15 @@
 
   <ion-list class="folder-list" *ngIf="!isLoading">
     <ng-container *ngIf="categories.length > 0; else noCategories">
-      <ion-item *ngFor="let categoria of categories" lines="none" (click)="openCategory(categoria)">
+      <ion-item *ngFor="let categoria of categories" lines="none" (click)="openCategory(categoria)" class="category-item">
         <ion-icon slot="start" name="folder-outline" class="folder-icon"></ion-icon>
-        <ion-label>{{ categoria.name }}</ion-label>
+        <ion-label>
+          <h2>{{ categoria.name }}</h2>
+          <p *ngIf="categoria.documentCount !== undefined" class="document-count">
+            {{ categoria.documentCount || 0 }} documento{{ (categoria.documentCount || 0) !== 1 ? 's' : '' }}
+          </p>
+        </ion-label>
+        <ion-icon slot="end" name="chevron-forward-outline" class="chevron-icon"></ion-icon>
       </ion-item>
     </ng-container>
     <ng-template #noCategories>

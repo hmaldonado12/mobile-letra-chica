@@ -1,53 +1,141 @@
-// 📄 Contracts Page - Estilos específicos (Optimizado)
-// ===================================================
+// 📄 Contracts Page - Enhanced Styles
+// ===================================
 
-@use '../../../theme/shared-variables.scss' as vars;
-
-// Título de la página
-ion-title {
-  font-size: vars.$font-size-xxl;
-  font-weight: vars.$font-weight-bold;
+// Main content
+ion-content {
+  --padding-top: 8px;
+  --padding-bottom: 8px;
 }
 
-// Botón flotante de agregar
-.add-category-fab {
-  --background: #{vars.$primary-color};
-  --color: white;
-  height: 80px;
-  width: 80px;
-  margin-top: vars.$spacing-xl;
-}
-
-// Lista de categorías
-.category-list {
-  padding: vars.$spacing-md;
+// Action buttons grid
+ion-grid {
+  padding: 0;
   
-  ion-item {
-    margin-bottom: vars.$spacing-sm;
-    border-radius: vars.$border-radius-md;
+  ion-row {
+    margin: 0 8px 16px 8px;
     
-    .category-header {
-      display: flex;
-      align-items: center;
-      
-      ion-icon {
-        font-size: 24px;
-        color: vars.$primary-color;
-        margin-right: vars.$spacing-sm;
+    ion-col {
+      padding: 4px;
+    }
+  }
+}
+
+.custom-button {
+  --border-radius: 12px;
+  --box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  height: 48px;
+  font-weight: 600;
+  
+  ion-icon {
+    margin-right: 8px;
+    font-size: 18px;
+  }
+}
+
+// Loading spinner
+.spinner-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  
+  ion-spinner {
+    --color: var(--ion-color-primary);
+    margin-bottom: 16px;
+    transform: scale(1.2);
+  }
+  
+  .loading-text {
+    color: var(--ion-color-medium);
+    font-size: 14px;
+  }
+}
+
+// Category list
+.folder-list {
+  padding: 0 8px;
+  
+  .category-item {
+    --background: var(--ion-color-light);
+    --border-radius: 12px;
+    --inner-padding-end: 16px;
+    --inner-padding-start: 16px;
+    --min-height: 64px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    
+    &:hover {
+      --background: var(--ion-color-step-50);
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    }
+    
+    .folder-icon {
+      color: var(--ion-color-primary);
+      font-size: 24px;
+      margin-right: 12px;
+    }
+    
+    ion-label {
+      h2 {
+        color: var(--ion-color-dark);
+        font-weight: 600;
+        font-size: 16px;
+        margin-bottom: 2px;
       }
       
-      .category-info {
-        flex: 1;
-        
-        .category-name {
-          font-size: vars.$font-size-xl;
-          font-weight: vars.$font-weight-semibold;
-          color: vars.$primary-color;
-        }
-        
-        .category-description {
-          font-size: vars.$font-size-md;
-          color: vars.$text-secondary;
+      .document-count {
+        color: var(--ion-color-medium);
+        font-size: 13px;
+        margin: 0;
+      }
+    }
+    
+    .chevron-icon {
+      color: var(--ion-color-medium);
+      font-size: 18px;
+    }
+  }
+  
+  .no-categories {
+    --background: var(--ion-color-light);
+    --border-radius: 12px;
+    --min-height: 80px;
+    opacity: 0.7;
+    text-align: center;
+    
+    ion-label {
+      font-style: italic;
+      color: var(--ion-color-medium);
+    }
+    
+    .folder-icon {
+      color: var(--ion-color-medium);
+      font-size: 32px;
+    }
+  }
+}
+
+// Alert customization
+.custom-alert {
+  --backdrop-opacity: 0.4;
+  
+  .alert-wrapper {
+    --border-radius: 16px;
+  }
+  
+  .alert-button-confirm {
+    --color: var(--ion-color-primary);
+    font-weight: 600;
+  }
+  
+  .alert-button-cancel {
+    --color: var(--ion-color-medium);
+  }
+}
           margin-top: vars.$spacing-sm;
         }
       }

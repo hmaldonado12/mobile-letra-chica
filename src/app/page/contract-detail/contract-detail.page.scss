@@ -1,64 +1,170 @@
 // Contract Detail page - estilos específicos solamente
 @use '/src/theme/shared-variables.scss' as vars;
 
-.resumen-contrato {
-  --padding-start: #{vars.$spacing-lg};
-  --padding-end: #{vars.$spacing-lg};
-  --padding-top: #{vars.$spacing-xxl};
+.contract-detail {
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --padding-top: 8px;
+  --padding-bottom: 80px;
+}
 
-  .container {
-    font-family: 'Helvetica', sans-serif;
-    color: vars.$primary-color;
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 50vh;
+  
+  ion-spinner {
+    margin-bottom: 16px;
+  }
+  
+  p {
+    color: var(--ion-color-medium);
+    font-size: 0.9em;
+  }
+}
 
-    h2 {
-      font-size: vars.$font-size-xxl;
-      font-weight: vars.$font-weight-bold;
-      margin-bottom: vars.$spacing-lg;
+.container {
+  font-family: 'Helvetica', sans-serif;
+  padding-bottom: 20px;
+}
+
+// Document header card
+.document-header {
+  margin-bottom: 16px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  
+  .document-title {
+    display: flex;
+    align-items: center;
+    color: var(--ion-color-primary);
+    font-size: 1.2em;
+    font-weight: 600;
+    margin-bottom: 8px;
+    
+    .title-icon {
+      margin-right: 8px;
+      font-size: 1.1em;
     }
+  }
+  
+  .document-meta {
+    display: flex;
+    align-items: center;
+    color: var(--ion-color-medium);
+    font-size: 0.85em;
+    margin-bottom: 4px;
+    
+    ion-icon {
+      margin-right: 4px;
+      font-size: 0.9em;
+    }
+  }
+  
+  .document-status {
+    margin-top: 8px;
+    
+    ion-badge {
+      font-size: 0.8em;
+      padding: 4px 8px;
+    }
+  }
+}
 
-    ul {
-      list-style-type: disc;
-      padding-left: 20px;
-      margin-bottom: 20px;
-
-      li {
-        font-size: vars.$font-size-md;
+// Analysis sections
+.analysis-section {
+  margin-bottom: 16px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  
+  .section-title {
+    display: flex;
+    align-items: center;
+    color: var(--ion-color-primary);
+    font-size: 1.1em;
+    font-weight: 600;
+    margin-bottom: 0;
+    
+    .section-icon {
+      font-size: 1.3em;
+      margin-right: 10px;
+    }
+    
+    .section-text {
+      flex: 1;
+    }
+  }
+  
+  .analysis-content {
+    .analysis-point {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 12px;
+      
+      .point-marker {
+        color: var(--ion-color-primary);
+        font-weight: bold;
+        margin-right: 8px;
+        margin-top: 2px;
+        flex-shrink: 0;
+      }
+      
+      .point-content {
+        flex: 1;
         line-height: 1.5;
-        margin-bottom: vars.$spacing-sm;
-
-        strong {
-          font-weight: vars.$font-weight-bold;
+        
+        .point-title {
+          font-weight: 600;
+          color: var(--ion-color-primary);
+          margin-right: 4px;
+        }
+        
+        .point-description {
+          color: var(--ion-text-color);
         }
       }
     }
   }
 }
 
-.section-icon {
-  font-size: 1.3em;
-  margin-right: 10px;
-}
-
-.footer-with-button {
-  position: relative;
-  height: 60px;
-  background: transparent;
-  border-top: none;
-  box-shadow: none;
-
-  .footer-content {
-    position: absolute;
-    top: -30px;
-    left: 50%;
-    transform: translateX(-50%);
+// Empty state
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  text-align: center;
+  
+  .empty-icon {
+    font-size: 4em;
+    color: var(--ion-color-medium);
+    margin-bottom: 16px;
+  }
+  
+  h3 {
+    color: var(--ion-text-color);
+    margin-bottom: 8px;
+  }
+  
+  p {
+    color: var(--ion-color-medium);
+    font-size: 0.9em;
   }
 }
 
-.home-button {
-  width: 60px;
-  height: 60px;
-  border-radius: vars.$border-radius-round;
-  --background: #{vars.$primary-color};
-  --color: white;
-  box-shadow: vars.$shadow-medium;
+// Action buttons
+.action-buttons {
+  margin-top: 24px;
+  padding: 0 16px 16px;
+  
+  .back-btn {
+    --background: transparent;
+    --border-color: var(--ion-color-primary);
+    --color: var(--ion-color-primary);
+    border-radius: 12px;
+    font-weight: 500;
+  }
 }

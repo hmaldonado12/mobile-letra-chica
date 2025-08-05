@@ -11,6 +11,8 @@ import {SaveInfoSessionService} from "../../infra/rest/save-info-session.service
 import {UserInfoHeaderComponent} from "../../components/user-info-header/user-info-header.component";
 import {ThemeToggleComponent} from "../../components/theme-toggle/theme-toggle.component";
 import {AppFooterComponent} from "../../components/app-footer/app-footer.component";
+import {DocumentService} from "../../infra/rest/document.service";
+import {UserService} from "../../infra/rest/user.service";
 
 @Component({
   selector: 'app-contracts',
@@ -33,7 +35,9 @@ export class ContractsPage implements OnInit {
               private retrieveInfoSession: RetrieveInfoSessionService,
               private saveInfoSession: SaveInfoSessionService,
               private createCategory: CreateCategoryRepositoryService,
-              private alertController: AlertController) {}
+              private alertController: AlertController,
+              private documentService: DocumentService,
+              private userService: UserService) {}
 
   ngOnInit(): void {
     console.log('🔧 ContractsPage ngOnInit iniciado');
@@ -51,18 +55,21 @@ export class ContractsPage implements OnInit {
   }
 
   private loadingCategories(userInput: string) {
-    console.log('🔄 loadingCategories iniciado para usuario:', userInput);
+    console.log('🔄 Loading categories for user:', userInput);
     this.isLoading = true;
     
-    console.log('📡 Haciendo request GET para categorías...');
+    console.log('📡 Making GET request for categories...');
     this.retrieveCategories.getUserCategories(userInput).subscribe({
       next: (response) => {
-        console.log('✅ Respuesta recibida:', response);
-        console.log('📊 Número de categorías recibidas:', response?.length || 0);
+        console.log('✅ Categories response received:', response);
+        console.log('📊 Number of categories received:', response?.length || 0);
         this.categories = response || [];
-        console.log(response);
+        
+        // Load documents for each category using the new DocumentService
+        this.loadDocumentsForCategories();
+        
         this.isLoading = false;
-        console.log('🏁 loadingCategories completado, categorías:', this.categories);
+        console.log('🏁 Loading categories completed, categories:', this.categories);
       },
       error: (error) => {
         console.error('❌ Error retrieving categories:', error);
@@ -72,6 +79,24 @@ export class ContractsPage implements OnInit {
         console.error('🔍 Error URL:', error?.url);
         this.isLoading = false;
       }
+    });
+  }
+
+  private loadDocumentsForCategories() {
+    console.log('📄 Loading documents for categories...');
+    this.categories.forEach(category => {
+      this.documentService.getDocuments(category.id).subscribe({
+        next: (documentsResponse) => {
+          console.log(`✅ Documents loaded for category ${category.name}:`, documentsResponse);
+          category.documents = documentsResponse.documents || [];
+          category.documentCount = category.documents.length;
+        },
+        error: (error) => {
+          console.error(`❌ Error loading documents for category ${category.name}:`, error);
+          category.documents = [];
+          category.documentCount = 0;
+        }
+      });
     });
   }
 
@@ -96,30 +121,47 @@ export class ContractsPage implements OnInit {
     this.showCategorySelector();
   }
 
-
-  openCategory(category: any) {
-    if (category.documents.length > 0 ) {
-      const index = category.documents.length - 1;
-      this.router.navigate(['/contract-list', category.documents[index].id]);
-      return;
-    }
-    this.presentAlertContracts().then(alert => {
-      console.log('Alert presented:', alert);
-    })
+  cancel() {
+    this.modal.dismiss(null, 'cancel');
   }
 
+  confirm() {
+    this.userIdFromSession = this.retrieveInfoSession.getSessionInfoByKey("userID");
+    console.log(this.userIdFromSession);
+    console.log('Modal dismissed with confirm:', this.name);
+    this.createCategory.createCategory(this.userIdFromSession, this.name).subscribe(response => {
+      console.log(response);
+      this.loadingCategories(this.userIdFromSession);
+    });
+    this.name = '';
+    this.modal.dismiss();
+  }
 
-  private retrieveCategoriesByUserId(userIdInput: string) {
-    this.retrieveCategories.getUserCategories(userIdInput).subscribe({
-      next: (response) => {
-        console.log('Categories retrieved successfully:', response);
-        this.categories = response || [];
-        console.log("other", this.categories);
-      }
-      , error: (error) =>  {
-        console.error('Error retrieving categories:', error);
-      }
-    })
+  onWillDismiss(event: any) {
+    console.log('Modal will dismiss:', event);
+  }
+
+  openCategory(category: any) {
+    console.log('📂 Opening category:', category.name, 'with documents:', category.documents?.length || 0);
+    
+    if (category.documents && category.documents.length > 0) {
+      // Save category info in session for navigation
+      this.saveInfoSession.saveSessionInfoByKey("selectedCategoryId", category.id);
+      this.saveInfoSession.saveSessionInfoByKey("selectedCategoryName", category.name);
+      
+      // Navigate to contract list for this category
+      this.router.navigate(['/contract-list'], { 
+        queryParams: { 
+          categoryId: category.id,
+          categoryName: category.name 
+        } 
+      });
+      return;
+    }
+    
+    this.presentAlertContracts().then(alert => {
+      console.log('Alert presented for empty category:', alert);
+    });
   }
 
   async showCreateCategoryAlert() {

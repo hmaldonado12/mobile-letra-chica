@@ -38,6 +38,10 @@ const routes: Routes = [
   {
     path: 'contract-list',
     loadChildren: () => import('./page/contract-list/contract-list.module').then(m => m.ContractListPageModule)
+  },
+  {
+    path: 'contract-detail',
+    loadChildren: () => import('./page/contract-detail/contract-detail.module').then(m => m.ContractDetailPageModule)
   }
 ];
 
