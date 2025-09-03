@@ -1,39 +1,79 @@
 <ion-header>
   <app-user-info-header></app-user-info-header>
   <ion-toolbar>
-    <ion-title>Detalle de contrato</ion-title>
+    <ion-title>Detalle del Documento</ion-title>
     <ion-buttons slot="end">
+      <ion-button (click)="confirmDeleteDocument()" fill="clear" color="danger">
+        <ion-icon name="trash-outline"></ion-icon>
+      </ion-button>
       <app-theme-toggle></app-theme-toggle>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="resumen-contrato">
-  <div class="container">
-    <!-- TÍTULO GENERAL DEL DOCUMENTO -->
-    <ion-card *ngIf="tituloGeneral">
+<ion-content class="contract-detail">
+  <!-- LOADING STATE -->
+  <div *ngIf="isLoading" class="loading-container">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Cargando documento...</p>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="container" *ngIf="!isLoading">
+    <!-- DOCUMENT HEADER -->
+    <ion-card *ngIf="tituloGeneral" class="document-header">
       <ion-card-header>
-        <ion-card-title class="titulo-general">
+        <ion-card-title class="document-title">
+          <ion-icon name="document-text-outline" class="title-icon"></ion-icon>
           {{ tituloGeneral }}
         </ion-card-title>
+        <ion-card-subtitle *ngIf="contractData?.createdAt" class="document-meta">
+          <ion-icon name="calendar-outline"></ion-icon>
+          Creado el {{ contractData.createdAt | date:'dd/MM/yyyy HH:mm' }}
+        </ion-card-subtitle>
+        <ion-card-subtitle *ngIf="contractData?.status" class="document-status">
+          <ion-badge [color]="contractData.status === 'analyzed' ? 'success' : 'medium'">
+            {{ contractData.status === 'analyzed' ? 'Analizado' : contractData.status }}
+          </ion-badge>
+        </ion-card-subtitle>
       </ion-card-header>
     </ion-card>
 
-    <ion-card *ngFor="let section of resumen">
+    <!-- ANALYSIS SECTIONS -->
+    <ion-card *ngFor="let section of resumen; let i = index" class="analysis-section">
       <ion-card-header>
-        <ion-card-title>
+        <ion-card-title class="section-title">
           <span class="section-icon">{{ section.icon }}</span>
-          {{ section.title }}
+          <span class="section-text">{{ section.title }}</span>
         </ion-card-title>
       </ion-card-header>
       <ion-card-content>
-        <ul>
-          <li *ngFor="let dot of section.dots">
-            <strong *ngIf="dot.title">{{ dot.title }}:</strong> {{ dot.description }}
-          </li>
-        </ul>
+        <div class="analysis-content">
+          <div *ngFor="let dot of section.dots; let j = index" class="analysis-point">
+            <div class="point-marker">•</div>
+            <div class="point-content">
+              <span *ngIf="dot.title" class="point-title">{{ dot.title }}:</span>
+              <span class="point-description">{{ dot.description }}</span>
+            </div>
+          </div>
+        </div>
       </ion-card-content>
     </ion-card>
+
+    <!-- EMPTY STATE -->
+    <div *ngIf="resumen.length === 0 && !isLoading" class="empty-state">
+      <ion-icon name="document-outline" class="empty-icon"></ion-icon>
+      <h3>No hay análisis disponible</h3>
+      <p>Este documento no tiene análisis generado</p>
+    </div>
+
+    <!-- ACTION BUTTONS -->
+    <div class="action-buttons" *ngIf="!isLoading">
+      <ion-button expand="block" fill="outline" (click)="goBack()" class="back-btn">
+        <ion-icon slot="start" name="arrow-back-outline"></ion-icon>
+        Volver a la Lista
+      </ion-button>
+    </div>
   </div>
 </ion-content>
 

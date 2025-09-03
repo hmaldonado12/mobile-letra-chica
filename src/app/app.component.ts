@@ -1,7 +1,5 @@
 import { Component } from '@angular/core';
-import { Capacitor } from '@capacitor/core';
-import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
-import {Platform} from "@ionic/angular";
+import { Platform } from "@ionic/angular";
 
 @Component({
   selector: 'app-root',
@@ -16,21 +14,7 @@ export class AppComponent {
 
   initializeApp() {
     this.platform.ready().then(() => {
-      if (Capacitor.getPlatform() !== 'web') {
-        GoogleAuth.initialize()
-          .then(() => {
-            console.log('GoogleAuth inicializado correctamente');
-          })
-          .catch((err) => {
-            console.error('Error al inicializar GoogleAuth:', err);
-          });
-      }
-    })
+      console.log('App inicializada con autenticación nativa de Google');
+    });
   }
 }
-
-// {
-//   clientId: '889927933084-6o5i9bet4eemuovr7de4boa17a5gpkku.apps.googleusercontent.com',
-//   scopes: ['profile', 'email'],
-//   grantOfflineAccess: false,
-// }

@@ -1,51 +1,126 @@
 <ion-header>
   <app-user-info-header></app-user-info-header>
   <ion-toolbar>
-    <ion-title>Ver Contrato</ion-title>
+    <ion-title>Análisis del Documento</ion-title>
     <ion-buttons slot="end">
       <app-theme-toggle></app-theme-toggle>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="resumen-contrato">
+<ion-content class="contract-analysis">
   <div class="container">
-
-    <!-- TÍTULO GENERAL DEL DOCUMENTO -->
-    <ion-card *ngIf="tituloGeneral">
+    <!-- TITLE SECTION -->
+    <ion-card *ngIf="tituloGeneral" class="title-card">
       <ion-card-header>
-        <ion-card-title class="titulo-general">
+        <ion-card-title class="document-title">
+          <ion-icon name="document-text-outline" class="title-icon"></ion-icon>
           {{ tituloGeneral }}
         </ion-card-title>
       </ion-card-header>
     </ion-card>
 
-    <!-- SECCIONES PARSEADAS -->
-    <ion-card *ngFor="let seccion of resumen">
+    <!-- ANALYSIS SECTIONS -->
+    <ion-card *ngFor="let seccion of resumen; let i = index" class="analysis-section">
       <ion-card-header>
-        <ion-card-title>{{ seccion.icono }} {{ seccion.titulo }}</ion-card-title>
+        <ion-card-title class="section-title">
+          <span class="section-icon">{{ seccion.icono }}</span>
+          <span class="section-text">{{ seccion.titulo }}</span>
+        </ion-card-title>
       </ion-card-header>
       <ion-card-content>
-        <ul>
-          <li *ngFor="let punto of seccion.puntos">
-            <strong *ngIf="punto.titulo">{{ punto.titulo }}:</strong> {{ punto.descripcion }}
-          </li>
-        </ul>
+        <div class="points-container">
+          <div *ngFor="let punto of seccion.puntos; let j = index" class="analysis-point">
+            <div class="point-content">
+              <span *ngIf="punto.titulo" class="point-title">{{ punto.titulo }}:</span>
+              <span class="point-description">{{ punto.descripcion }}</span>
+            </div>
+          </div>
+        </div>
       </ion-card-content>
     </ion-card>
 
+    <!-- SAVE BUTTON -->
+    <div class="save-section">
+      <ion-button 
+        id="open-modal" 
+        expand="block" 
+        class="save-btn"
+        [disabled]="categories.length === 0">
+        <ion-icon slot="start" name="folder-outline"></ion-icon>
+        Guardar en Categoría
+      </ion-button>
+    </div>
+
+    <!-- SUCCESS ALERT -->
     <ion-alert
       [isOpen]="isAlertOpen"
-      header="SUCCESSFUL"
-      message="El contrato se ha guardado correctamente."
+      header="¡Éxito!"
+      message="El documento se ha guardado correctamente en la categoría seleccionada."
       [buttons]="alertButtons"
       (didDismiss)="setOpen(false)"
     ></ion-alert>
-
-    <ion-button expand="block" class="guardar-btn" (click)="guardarEnCarpeta()">
-      Guardar en carpeta
-    </ion-button>
   </div>
+
+  <!-- CATEGORY SELECTION MODAL -->
+  <ion-modal 
+    trigger="open-modal"
+    [initialBreakpoint]="0.4"
+    [breakpoints]="[0, 0.4, 0.7, 1]">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Seleccionar Categoría</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="cancel()">
+              <ion-icon name="close-outline"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      
+      <ion-content class="modal-content">
+        <div class="modal-header">
+          <h3>¿En qué categoría deseas guardar este documento?</h3>
+        </div>
+        
+        <ion-list *ngIf="categories.length > 0; else noCategories">
+          <ion-item *ngFor="let category of categories" class="category-item">
+            <ion-checkbox
+              slot="start"
+              [checked]="category.selected"
+              (ionChange)="onCategorySelectionChange($event, category)">
+            </ion-checkbox>
+            <ion-label class="category-label">
+              <h2>{{ category.name }}</h2>
+              <p>{{ category.email }}</p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+        
+        <ng-template #noCategories>
+          <div class="no-categories-message">
+            <ion-icon name="folder-outline" class="empty-icon"></ion-icon>
+            <h3>No hay categorías disponibles</h3>
+            <p>Necesitas crear al menos una categoría para guardar el documento</p>
+          </div>
+        </ng-template>
+        
+        <div class="modal-actions">
+          <ion-button 
+            expand="block" 
+            (click)="confirm()" 
+            [disabled]="!categories.some(c => c.selected)"
+            class="confirm-btn">
+            <ion-icon slot="start" name="checkmark-outline"></ion-icon>
+            Guardar Documento
+          </ion-button>
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
 </ion-content>
 
-<app-footer></app-footer>
+<ion-footer>
+  <app-footer></app-footer>
+</ion-footer>

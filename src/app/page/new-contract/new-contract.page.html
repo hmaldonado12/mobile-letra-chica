@@ -1,7 +1,7 @@
 <ion-header>
   <app-user-info-header></app-user-info-header>
   <ion-toolbar>
-    <ion-title>Nuevo Contrato</ion-title>
+    <ion-title>Nuevo Documento</ion-title>
     <ion-buttons slot="end">
       <app-theme-toggle></app-theme-toggle>
     </ion-buttons>
@@ -10,31 +10,94 @@
 
 <ion-content [fullscreen]="true">
   <div class="container" *ngIf="!isUploading; else loadingBlock">
-    <div class="custom-title">Nuevo Contrato</div>
-    <div class="cards-row">
-      <div class="card-btn">
-        <ion-button expand="block" fill="clear" (click)="onCamera()" class="big-btn">
+    <div class="custom-title">Agregar Nuevo Documento</div>
+    
+    <div class="upload-options">
+      <div class="option-card">
+        <ion-button 
+          expand="block" 
+          fill="clear" 
+          (click)="fileInput.click()" 
+          class="upload-btn"
+          [disabled]="isUploading">
           <div class="btn-content">
-            <ion-icon name="camera-outline" class="icon-btn"></ion-icon>
-            <span>Escanear con camara</span>
+            <ion-icon name="document-attach-outline" class="option-icon"></ion-icon>
+            <div class="option-text">
+              <h3>Subir Archivo PDF</h3>
+              <p>Selecciona un archivo PDF desde tu dispositivo</p>
+            </div>
           </div>
         </ion-button>
+        <input 
+          #fileInput 
+          type="file" 
+          accept="application/pdf" 
+          style="display: none" 
+          (change)="onFileSelected($event)" />
       </div>
-      <div class="card-btn">
-        <ion-button expand="block" fill="clear" (click)="fileInput.click()" class="big-btn">
+
+      <div class="option-card">
+        <ion-button 
+          expand="block" 
+          fill="clear" 
+          (click)="onCamera()" 
+          class="upload-btn"
+          [disabled]="isUploading">
           <div class="btn-content">
-            <ion-icon name="cloud-upload-outline" class="icon-btn"></ion-icon>
-            <span>Subir archivo</span>
+            <ion-icon name="camera-outline" class="option-icon"></ion-icon>
+            <div class="option-text">
+              <h3>Escanear con Cámara</h3>
+              <p>Toma una foto del documento</p>
+            </div>
           </div>
         </ion-button>
-        <input #fileInput type="file" accept="application/pdf" style="display: none" (change)="onFileSelected($event)" />
       </div>
     </div>
+
+    <div class="file-info" *ngIf="selectedFile">
+      <ion-card>
+        <ion-card-content>
+          <div class="selected-file">
+            <ion-icon name="document-outline" class="file-icon"></ion-icon>
+            <div class="file-details">
+              <h4>{{ selectedFile.name }}</h4>
+              <p>{{ (selectedFile.size / 1024 / 1024).toFixed(2) }} MB</p>
+            </div>
+          </div>
+          <ion-button 
+            expand="block" 
+            (click)="onUpload()" 
+            [disabled]="isUploading"
+            class="analyze-btn">
+            <ion-icon slot="start" name="analytics-outline"></ion-icon>
+            Analizar Documento
+          </ion-button>
+        </ion-card-content>
+      </ion-card>
+    </div>
   </div>
+  
   <ng-template #loadingBlock>
     <div class="uploading-container">
-      <ion-spinner name="crescent"></ion-spinner>
-      <div class="uploading-text">Aguardando a que el contrato sea cargado...</div>
+      <ion-spinner name="crescent" class="loading-spinner"></ion-spinner>
+      <div class="uploading-text">
+        <h3>Analizando documento...</h3>
+        <p>Por favor espera mientras procesamos tu documento</p>
+      </div>
+      <div class="progress-steps">
+        <div class="step active">
+          <ion-icon name="cloud-upload-outline"></ion-icon>
+          <span>Subiendo</span>
+        </div>
+        <div class="step active">
+          <ion-icon name="analytics-outline"></ion-icon>
+          <span>Analizando</span>
+        </div>
+        <div class="step">
+          <ion-icon name="checkmark-outline"></ion-icon>
+          <span>Completado</span>
+        </div>
+      </div>
     </div>
   </ng-template>
 </ion-content>

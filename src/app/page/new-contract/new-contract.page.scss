@@ -1,3 +1,6 @@
+// New Contract page - estilos específicos solamente
+@use '/src/theme/shared-variables.scss' as vars;
+
 .container {
   display: flex;
   flex-direction: column;
@@ -9,27 +12,27 @@
 }
 
 .custom-title {
-  color: #1976d2;
+  color: vars.$info-color;
   font-weight: bold;
-  font-size: 2rem;
+  font-size: vars.$font-size-title;
   text-align: center;
-  margin-bottom: 32px;
-  margin-top: 16px;
+  margin-bottom: vars.$spacing-xxl * 1.5;
+  margin-top: vars.$spacing-lg;
   letter-spacing: 0.5px;
 }
 
 .cards-row {
   display: flex;
   flex-direction: row;
-  gap: 24px;
+  gap: vars.$spacing-xxl;
   justify-content: center;
   align-items: center;
   width: 100%;
 }
 
 .card-btn {
-  background: #e3f2fd;
-  border-radius: 24px;
+  background: vars.$background-light;
+  border-radius: vars.$spacing-xxl;
   box-shadow: 0 2px 8px rgba(25, 118, 210, 0.08);
   width: 140px;
   height: 140px;
@@ -57,12 +60,12 @@
 
 .icon-btn {
   font-size: 2.5rem;
-  color: #1976d2;
-  margin-bottom: 12px;
+  color: vars.$info-color;
+  margin-bottom: vars.$spacing-md;
 }
 
 .card-btn span {
-  color: #1976d2;
+  color: vars.$info-color;
   font-size: 1rem;
   font-weight: 500;
   text-align: center;
@@ -71,6 +74,6 @@
 @media (max-width: 500px) {
   .cards-row {
     flex-direction: column;
-    gap: 20px;
+    gap: vars.$spacing-xl;
   }
 }

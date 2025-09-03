@@ -1,7 +1,7 @@
 <ion-header>
   <app-user-info-header></app-user-info-header>
   <ion-toolbar>
-    <ion-title>Lista de contratos</ion-title>
+    <ion-title>{{ categoryName }}</ion-title>
     <ion-buttons slot="end">
       <app-theme-toggle></app-theme-toggle>
     </ion-buttons>
@@ -9,44 +9,80 @@
 </ion-header>
 
 <ion-content>
-  <ion-searchbar [(ngModel)]="searchTerm" placeholder="Buscar contratos"></ion-searchbar>
+  <ion-searchbar 
+    [(ngModel)]="searchTerm" 
+    (ionInput)="filterContracts()"
+    placeholder="Buscar documentos..."
+    show-clear-button="focus">
+  </ion-searchbar>
+
+  <div class="action-buttons ion-padding-horizontal">
+    <ion-button expand="block" fill="outline" (click)="goToNewContract()" class="add-contract-btn">
+      <ion-icon slot="start" name="add-outline"></ion-icon>
+      Nuevo Documento
+    </ion-button>
+  </div>
 
   <div *ngIf="isLoading" class="spinner-container">
     <ion-spinner name="crescent"></ion-spinner>
-    <div class="loader-text">Obteniendo contratos de la categoría...</div>
+    <div class="loader-text">Cargando documentos...</div>
   </div>
 
   <ion-list *ngIf="!isLoading">
     <ng-container *ngIf="filteredContracts.length > 0; else noContracts">
-      <ion-item
-        *ngFor="let contract of filteredContracts"
-        button="true"
-        (click)="openContract(contract.id)"
-        class="contract-item"
-        lines="none"
-      >
-        <ion-label>
-          <strong>{{ contract.title || 'Contrato sin título' }}</strong>
-          <div class="contract-meta">
-            <span class="contract-date">{{ contract.date || '' }}</span>
-            <span class="contract-status">{{ contract.status === 'analyzed' ? 'analizado' : contract.status }}</span>
-          </div>
-        </ion-label>
-      </ion-item>
+      <ion-item-sliding *ngFor="let contract of filteredContracts">
+        <ion-item
+          button="true"
+          (click)="openContract(contract)"
+          class="contract-item"
+          lines="none"
+        >
+          <ion-icon slot="start" name="document-text-outline" class="document-icon"></ion-icon>
+          <ion-label>
+            <h2>{{ contract.title || 'Documento sin título' }}</h2>
+            <p class="contract-summary" *ngIf="contract.summary">
+              {{ (contract.summary | slice:0:100) + (contract.summary.length > 100 ? '...' : '') }}
+            </p>
+            <div class="contract-meta">
+              <span class="contract-date" *ngIf="contract.createdAt">
+                {{ contract.createdAt | date:'dd/MM/yyyy' }}
+              </span>
+              <span class="contract-status" [class]="'status-' + contract.status">
+                {{ contract.status === 'analyzed' ? 'Analizado' : contract.status }}
+              </span>
+            </div>
+          </ion-label>
+          <ion-icon slot="end" name="chevron-forward-outline" class="chevron-icon"></ion-icon>
+        </ion-item>
+        
+        <ion-item-options side="end">
+          <ion-item-option color="danger" (click)="confirmDeleteContract(contract, $event)">
+            <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+          </ion-item-option>
+        </ion-item-options>
+      </ion-item-sliding>
     </ng-container>
+    
     <ng-template #noContracts>
-      <ion-item lines="none" class="contract-item no-contracts">
-        <ion-label>
-          No hay contratos disponibles en esta categoría
-        </ion-label>
-      </ion-item>
+      <div class="empty-state ion-padding">
+        <ion-icon name="document-outline" class="empty-icon"></ion-icon>
+        <h3>No hay documentos</h3>
+        <p *ngIf="searchTerm">No se encontraron documentos que coincidan con "{{ searchTerm }}"</p>
+        <p *ngIf="!searchTerm">Aún no has agregado documentos a esta categoría</p>
+        <ion-button expand="block" fill="outline" (click)="goToNewContract()" *ngIf="!searchTerm">
+          <ion-icon slot="start" name="add-outline"></ion-icon>
+          Agregar Primer Documento
+        </ion-button>
+      </div>
     </ng-template>
   </ion-list>
 </ion-content>
 
 <app-footer>
-  <ion-button expand="block" color="danger" (click)="confirmDeleteCategory()">
+  <ion-button expand="block" color="danger" fill="outline" (click)="confirmDeleteCategory()">
     <ion-icon name="trash-outline" slot="start"></ion-icon>
-    Eliminar categoría
+    Eliminar Categoría
+  </ion-button>
+</app-footer>
   </ion-button>
 </app-footer>

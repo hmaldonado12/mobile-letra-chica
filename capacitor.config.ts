@@ -4,11 +4,15 @@ const config: CapacitorConfig = {
   appId: 'io.ionic.starter',
   appName: 'letra chica',
   webDir: 'www',
+  server: {
+    // Para desarrollo - permitir certificados autofirmados
+    cleartext: true,
+    allowNavigation: ['192.168.0.59:8443']
+  },
   plugins: {
-    GoogleAuth: {
-      scopes: ['profile', 'email'],
-      serverClientId: '889927933084-46ddd2ngoomn04qc7e6s1tiq12hn3t8b.apps.googleusercontent.com',
-      forceCodeForRefreshToken: true
+    FirebaseAuthentication: {
+      skipNativeAuth: false,
+      providers: ['google.com']
     }
   }
 };

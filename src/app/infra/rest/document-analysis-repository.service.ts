@@ -13,9 +13,8 @@ export class DocumentAnalysisRepositoryService {
   constructor(private http: HttpClient) { }
 
   analyzeDocument(categoryId: string, file: File): Observable<any> {
-    const baseUrl = environment.apiUrl
-    this.apiUrl = baseUrl + this.apiUrl;
-    const url = `${this.apiUrl}/${categoryId}/documents/analyze`;
+    const baseUrl = environment.apiUrl;
+    const url = `${baseUrl}/categories/${categoryId}/documents/analyze`;
     const formData = new FormData();
     formData.append('file', file);
 
